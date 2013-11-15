@@ -32,8 +32,8 @@ Puting in Git
 Include icons and links to twitter and facebook
 	- http://noizwaves.github.io/bootstrap-social-buttons/
 	- http://fortawesome.github.io/Font-Awesome/
-	- in gemfile include
-		gem 'less', '2.2.2' 
+	- https://github.com/bokmann/font-awesome-rails
+	-  $ gem install font-awesome-rails
 
 Sending to Heroku
 
@@ -48,9 +48,27 @@ Sending to Heroku
 			group :production do
 			  gem 'rails_log_stdout',           github: 'heroku/rails_log_stdout'
 			  gem 'rails3_serve_static_assets', github: 'heroku/rails3_serve_static_assets'
+			  gem 'pg', '0.15.1'
+			  gem 'rails_12factor', '0.0.2'
 			end
 	Sending
-	
+			https://devcenter.heroku.com/articles/getting-started-with-ruby
+		Heroku works with PostgresQL
+			- add a the declarations in Gemfile to be like the following
+
+		Before deploy to heroku
+			$ bundle install --without production
+			$ bundle update
+			$ bundle install
+
+		Basic Commands básicos:
+			$ heroku create
+			$ git push heroku master
+			$ heroku run rake db:migrate
+			$ heroku open
+			Running in http://railsfirstapproma.herokuapp.com/users
+
+
 
 then do the whole git add ., git commit, git push heroku master.
 
