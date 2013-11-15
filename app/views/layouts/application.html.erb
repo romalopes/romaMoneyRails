@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<% if false%>
+<!--    <title><%= content_for?(:title) ? yield(:title) : "Roma Money Rails" %></title> -->
+<%end%>    
+     <title><%= full_title_page(yield(:title)) %></title>
+
+    <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Roma Money Rails" %>">
+    <%= stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true %>
+    <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body>
+    <%# application layout styled for Twitter Bootstrap 2.3 %>
+    <header>
+      <%= render 'layouts/header' %>
+    </header>
+    <main role="main">
+      <!-- 
+      <%if false%>
+      <div class="container">
+        <div class="content">
+           <div class="row">
+            <div class="span12">
+              <%= render 'layouts/messages' %> 
+              roma roma roma
+            </div>
+          </div>
+        </div>
+      </div> 
+      <%end%>-->
+      <div class="content" style="padding-left:10px">
+        <div class="row">
+          <div class="span12">
+            <div class="row">
+              <div class="span4"> saasddf</div>
+              <div class="span8">
+                <%= render 'layouts/messages' %> 
+                roma roma messages
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="span12">
+            <%= yield %>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="span12">
+              <%= debug(params) if Rails.env.development? %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+    <%= render 'layouts/footer' %>
+    <%= render 'layouts/copywrite' %>
+  </body>
+</html>
