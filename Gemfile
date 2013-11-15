@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 ruby '2.0.0'
 gem 'rails', '4.0.1'
-gem 'sqlite3'
 gem 'sass-rails', '~> 4.0.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
@@ -14,6 +13,8 @@ gem 'therubyracer', :platform=>:ruby
 gem 'less'#, '2.2.2' 
 gem 'less-rails'
 gem "font-awesome-rails"
+gem 'bcrypt-ruby', '3.1.2'
+
 #gem "twitter-bootstrap-rails"
 group :development do
   gem 'better_errors'
@@ -30,6 +31,7 @@ group :development do
   gem 'childprocess', '0.3.6'  
 end
 group :development, :test do
+  gem 'sqlite3'
   gem 'factory_girl_rails'
   gem 'rspec-rails'
 end

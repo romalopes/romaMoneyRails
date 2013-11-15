@@ -1,16 +1,17 @@
-<div class="row">
-	<aside class="span4">
-	    <section>
-romalopes romalopes romalopes romalopes romalopes romalopes romalopes romalopes romalopes romalopes romalopes romalopes 
-	    </section>
-	</aside>
-	<div class="span8">
-romalopes romalopes romalopes romalopes romalopes romalopes romalopes romalopes romalopes romalopes romalopes romalopes romalopes romalopes romalopes romalopes romalopes romalopes romalopes romalopes romalopes romalopes romalopes romalopes 
-<center><h1>Roma Money Rails tesT TEST</h1>	</center>
-<p>Find me in app/views/home/index.html.erb</p>
+<% if signed_in? %>
+
+	<h1>Signed In</h1>
+<% else %>
+	<div class="row">
+		<aside class="span4">
+		    <section>
+		    </section>
+		</aside>
+		<div class="span8 center" style="background-color:lightgray; padding-bottom:20px">
+	    	<h3>Welcome to the Roma Money Rails</h3>
+
+		    <%= link_to "Sign up", signup_path, class: "btn btn-large btn-primary" %>
+	  	</div>
 	</div>
-</div>
-<p/>
-<p/>
-<p/>
-<p/>
+<% end %>
+

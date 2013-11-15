@@ -1,0 +1,21 @@
+<% provide(:title, @user.name) %>
+<div class="row">
+  <aside class="span4">
+  	INSIDE SHOW span4
+    <section>
+      <h3>
+        <%= gravatar_for @user, {size:80} %>
+        <%= @user.name %>
+      </h3>
+    </section>
+    <section>
+          <%= render 'shared/infoAccount' %>
+    </section>
+  </aside>
+  <div class="span8">
+    INSIDE SHOW span8
+   </div>
+</div>
+
+
+<%= @user.name %>, <%= @user.email %>

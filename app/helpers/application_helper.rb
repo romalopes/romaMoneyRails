@@ -10,4 +10,8 @@ module ApplicationHelper
     end
   end
 
+
+  def signed_in?
+	false
+  end
 end

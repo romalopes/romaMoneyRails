@@ -14,7 +14,7 @@ describe "Static pages" do
 		#copywrite 
 		it { should have_content('2013 Anderson Araújo Lopes(RomaLopes)') }
 
-	  	it { should have_selector('h1', text: heading) }
+	  	it { should have_selector('h3', text: heading) }
 	    it { should have_title(full_title_page(page_title)) }
 	end
 
