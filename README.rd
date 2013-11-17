@@ -348,15 +348,27 @@ Sign Up
 		                                   :password_confirmation)
 		    end
 		end
-SSL
-	In config/environments/production.rb, include to SSL
-	  # Force all access to the app over SSL, use Strict-Transport-Security,
-	  # and use secure cookies.
-	  config.force_ssl = true
+	SSL
+		In config/environments/production.rb, include to SSL
+		  # Force all access to the app over SSL, use Strict-Transport-Security,
+		  # and use secure cookies.
+		  config.force_ssl = true
 
-	- Heroku provides a pratform to SSL.  To create a SSL for your domaing, many steps should be taking and you should by a SSL certificate.
-		- http://devcenter.heroku.com/articles/ssl
+		- Heroku provides a pratform to SSL.  To create a SSL for your domaing, many steps should be taking and you should by a SSL certificate.
+			- http://devcenter.heroku.com/articles/ssl
 
+	Commiting
+		    $ git add .
+			$ git commit -m "include-users"
+			$ git checkout master
+			$ git merge sign-up
+		
+	    More Commiting and Heroku
+	    	$ git commit -a -m "Add SSL in production"
+			$ git push heroku
+			- Migrate the DB to heroku
+				$ heroku run rake db:migrate
+			$ heroku open
 
 
 
