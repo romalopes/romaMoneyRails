@@ -45,6 +45,23 @@ Layout and Bootstrap
     	include -> config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
 Sending to Heroku
 
+	- Change config/initializer/secret_token.rb
+		 secret token used by Rails to encrypt session variables so that it is dynamically generated rather than hard-coded
+			require 'securerandom'
+
+			def secure_token
+			  token_file = Rails.root.join('.secret')
+			  if File.exist?(token_file)
+			    # Use the existing token.
+			    File.read(token_file).chomp
+			  else
+			    # Generate a new token and store it in token_file.
+			    token = SecureRandom.hex(64)
+			    File.write(token_file, token)
+			    token
+			  end
+			end
+			RomaMoneyRails::Application.config.secret_key_base = secure_token		 
 	To make heroku work with Bootstrap
 		
 		1. In your config/enviroments/production.rb:
@@ -365,11 +382,243 @@ Sign Up
 		
 	    More Commiting and Heroku
 	    	$ git commit -a -m "Add SSL in production"
-			$ git push heroku
+			$ git push heroku master
 			- Migrate the DB to heroku
 				$ heroku run rake db:migrate
 			$ heroku open
 
+
+Sign in, sign out
+	$ git checkout -b sign-in-out		
+
+	Sign in and Sign out are particular REST action in a Controller
+	$ rails generate controller Sessions --no-test-framework
+		Create controller, view, helper, js.coffee and scss
+	$ rails generate integration_test authentication_pages
+		Creates spec/requests/authentication_pages_spec.rb
+
+	Create a test in spec/requests/authentication_pages_spec.rb
+		require 'spec_helper'
+
+		describe "Authentication" do
+
+		  subject { page }
+
+		  describe "signin page" do
+		    before { visit signin_path }
+
+		    it { should have_content('Sign in') }
+		    it { should have_title('Sign in') }
+		  end
+		end
+
+	in config/routes.rb
+		resources :sessions, only: [:new, :create, :destroy]
+
+		match '/signin',  to: 'sessions#new',         via: 'get'
+  		match '/signout', to: 'sessions#destroy',     via: 'delete'
+  			Should be invokes using HTTP DELETE request
+
+  		use $ rake routes --- to see the routes
+  	in app/controllers/sessions_controller.rb, define the methods.
+  		  protect_from_forgery with: :exception
+  		  include SessionsHelper
+
+  		def new
+		end
+
+		def create
+			#render 'new'
+			user = User.find_by(email: params[:session][:email].downcase)
+			if user && user.authenticate(params[:session][:password])
+			    # Sign the user in and redirect to the user's show page.
+			    sign_in user  #call method
+      			redirect_to user #redirect to user
+
+			else
+			    # Create an error message and re-render the signin form.
+			    #flash[:error] = 'Invalid email/password combination' # Not quite right!
+			    #Now to avoid repetition in case of calling another page.
+	      		flash.now[:error] = 'Invalid email/password combination'
+	      		render 'new'				
+			end
+		end
+
+		def destroy
+		end
+	in pp/views/sessions/new.html.erb, insert a code
+		<% provide(:title, "Sign in") %>
+		<h1>Sign in</h1>
+		<div class="row">
+		  <div class="span4 offset4">
+		    <%= form_for(:session, url: sessions_path) do |f| %>
+
+		      <%= f.label :email %>
+		      <%= f.text_field :email %>
+
+		      <%= f.label :password %>
+		      <%= f.password_field :password %>
+
+		      <%= f.submit "Sign in", class: "btn btn-large btn-primary" %>
+		    <% end %>
+
+		    <p>New user? <%= link_to "Sign up now!", signup_path %></p>
+		  </div>
+		</div>
+	Create a test for Signin
+		int spec/requests/authentication_pages_spec.rb
+			describe "signin" do
+			    before { visit signin_path }
+
+			    describe "with invalid information" do
+			    
+			      before { click_button "Sign in" }
+
+			      it { should have_title('Sign in') }
+			      it { should have_selector('div.alert.alert-error', text: 'Invalid') }
+			    end
+
+			    # To guarantee that in case of error, in the next page the flash with error will not be repeated. see 8.1.5
+			    describe "after visiting another page" do
+			    	before { click_link "Home" }  #click in any page to test
+  					it { should_not have_selector('div.alert.alert-error') }
+				end
+		  	end
+		$ bundle exec rspec spec/requests/authentication_pages_spec.rb -e "signin with invalid information"
+			- Still error
+	Sigin
+		In app/controller/sessions_controller.rb
+			sign_in user
+      		redirect_to user
+     Remember me
+     	protect_from_forgery with: :exception
+     	#The module to use session
+  		include SessionsHelper
+
+  		$ rails generate migration add_remember_token_to_users
+
+  		In user_spec.rb
+			it { should respond_to(:password_confirmation) }
+  			it { should respond_to(:remember_token) }
+			it { should respond_to(:authenticate) }
+		In db/migrate/[ts]_add_remember_token_to_users.rb
+			class AddRememberTokenToUsers < ActiveRecord::Migration
+			  def change
+			    add_column :users, :remember_token, :string
+			    add_index  :users, :remember_token
+			  end
+			end
+		DB Migrate
+			$ bundle exec rake db:migrate
+			$ bundle exec rake test:prepare
+		In user.rb
+			def User.new_remember_token
+			    SecureRandom.urlsafe_base64
+			  end
+
+			  def User.encrypt(token)
+			    Digest::SHA1.hexdigest(token.to_s)
+			  end
+
+			  private
+
+			    def create_remember_token
+			      self.remember_token = User.encrypt(User.new_remember_token)
+			    end
+	Sign_in Method
+		in app/helpers/sessions_helper.rb
+		module SessionsHelper
+
+		  def sign_in(user)
+		    remember_token = User.new_remember_token
+		    cookies.permanent[:remember_token] = remember_token
+		    user.update_attribute(:remember_token, User.encrypt(remember_token))
+		    self.current_user = user
+		  end
+
+		 def signed_in?
+		    !current_user.nil?
+		  end
+
+		  def current_user=(user)
+		    @current_user = user
+		  end
+
+		  def current_user
+		    remember_token = User.encrypt(cookies[:remember_token])
+		    @current_user ||= User.find_by(remember_token: remember_token)
+		  end
+		end
+	Verify if is is signed in
+		def signed_in?
+			!current_user.nil?
+		end
+		change app/views/layouts/_header.html.erb
+
+	Sigin upon Signup
+	    Create a new test in spec/requests/user_pages_spec.rb
+
+			describe "after saving the user" do
+	        before { click_button submit }
+	        let(:user) { User.find_by(email: 'user@example.com') }
+
+	        it { should have_link('Sign out') }
+	        it { should have_title(user.name) }
+	        it { should have_selector('div.alert.alert-success', text: 'Welcome') }
+	      end
+	    Change create in users_controller to include the sign_in @user
+	    	def create
+			    @user = User.new(user_params)
+			    if @user.save
+			      sign_in @user
+			      flash[:success] = "Welcome to the Sample App!"
+			      redirect_to @user
+			    else
+			      render 'new'
+			    end
+			end
+	Siging out
+		spec/requests/authentication_pages_spec.rb
+			describe "followed by signout" do
+		        before { click_link "Sign out" }
+		        it { should have_link('Sign in') }
+		    end
+		in sessions_helper.rb
+			  def sign_out
+			    self.current_user = nil
+			    cookies.delete(:remember_token)
+			  end
+	Using Cucumber - BDD test
+
+		Addin cucumber-rails in GemFile
+			gem 'cucumber-rails', '1.4.0', :require => false
+  			gem 'database_cleaner', github: 'bmabey/database_cleaner'
+		$ bundle install
+		- Generate files for cucumber in features
+			$ rails generate cucumber:install
+
+		in features/signing_in.feature
+			Create a feature
+		$ bundle exec cucumber features/
+			Will have errors
+		Create features/step_definitions/authentication_steps.rb
+		- Run test again
+	in spec/support/utilities.rb
+		It is possible to create methods to be used in test.
+		Ex:
+			def valid_signin(user)
+			  fill_in "Email",    with: user.email
+			  fill_in "Password", with: user.password
+			  click_button "Sign in"
+			end
+	- Git/Heroku
+		$ git add .
+		$ git commit -m "Finish sign in"
+		$ git checkout master
+		$ git merge sign-in-out		
+		$ git push
+		$ git push heroku
+		$ heroku run rake db:migrate
 
 
 
