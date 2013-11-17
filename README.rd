@@ -250,8 +250,112 @@ Include users
 
 				- add_password_digest_to_users can be any name, but the sufix "_to_users" refers to users table.
 				- name and type of attribute I created(password_digest:string)
+Sign Up
+	Include Resources
+		in config/routes.rb:
+			resources :users
+		- This adds the URL working /users/1 and all RESTs urls
+	Create HTML app/views/users/show.html.erb
+		
+	In controller, creates the method show to return the User.
+		class UsersController < ApplicationController
 
+  		def show
+    		@user = User.find(params[:id])
+  		end
+  		...
+  	In gemfile . This include the possibility of bootstrap MOCK.
+		  gem 'factory_girl_rails', '4.2.1'
 
+	- Then create a file spec/factories.rb
+	  	FactoryGirl.define do
+		  factory :user do
+		    name     "Andersno Lopes"
+		    email    "romalopes@yahoo.com.br"
+		    password "foobar"
+		    password_confirmation "foobar"
+		  end
+		end
+	And use in user_pages_spec.rb test:
+		let(:user) { FactoryGirl.create(:user) } 
+
+	  describe "profile page" do
+	    let(:user) { FactoryGirl.create(:user) }
+	    before { visit user_path(user) }
+
+	    it { should have_content(user.name) }
+	    it { should have_title(user.name) }
+	  end
+	To make test fast with password, goes to config/environment/test.rb and include
+		# Speed up tests by lowering bcrypt's cost function.
+  		ActiveModel::SecurePassword.min_cost = true
+
+  	- create method to use gravatar in app/helpers/users_helper.rb
+  		Globally recognized avatar ( Gravatar) - http://en.gravatar.com/
+	To clean DataBase
+			$ bundle exec rake db:reset
+			$ bundle exec rake test:prepare
+	Tests to sign up page in rspec/requests/user_pages_spec.rb
+		describe "signup" do
+
+		    before { visit signup_path }
+
+		    let(:submit) { "Create my account" }
+
+		    describe "with invalid information" do
+		      it "should not create a user" do
+		        expect { click_button submit }.not_to change(User, :count)
+		      end
+		    end
+
+		    describe "with valid information" do
+		      before do
+		        fill_in "Name",         with: "Example User"
+		        fill_in "Email",        with: "user@example.com"
+		        fill_in "Password",     with: "foobar"
+		        fill_in "Confirmation", with: "foobar"
+		      end
+
+		      it "should create a user" do
+		        expect { click_button submit }.to change(User, :count).by(1)
+		      end
+		    end
+		end
+	And app/controllers/users_controller.rb
+	class UsersController < ApplicationController
+	  
+		def new   
+			@user = User.new
+		end
+
+	    def create
+		    @user = User.new(params[:user])    # Not the final implementation!
+		    #Equivalent to
+		    #@user = User.new(name: "Foo Bar", email: "foo@invalid", password: "foo", password_confirmation: "bar")
+		    #The final implementation
+		    @user = User.new(user_params)
+		    if @user.save
+		      # Handle a successful save.
+		      flash[:success] = "Welcome to the Sample App!"
+		      redirect_to @user
+		    else
+		      render 'new'
+		    end
+	    end
+	     private
+		    def user_params
+		      params.require(:user).permit(:name, :email, :password,
+		                                   :password_confirmation)
+		    end
+		end
+SSL
+	In config/environments/production.rb, include to SSL
+	  # Force all access to the app over SSL, use Strict-Transport-Security,
+	  # and use secure cookies.
+	  config.force_ssl = true
+
+	- Heroku provides a pratform to SSL.  To create a SSL for your domaing, many steps should be taking and you should by a SSL certificate.
+		- http://devcenter.heroku.com/articles/ssl
 
 
 
