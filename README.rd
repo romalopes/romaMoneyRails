@@ -394,9 +394,20 @@ Sign in, sign out
 	Sign in and Sign out are particular REST action in a Controller
 	$ rails generate controller Sessions --no-test-framework
 		Create controller, view, helper, js.coffee and scss
+			invoke  erb
+		      create    app/views/sessions
+		      invoke  helper
+		      create    app/helpers/sessions_helper.rb
+		      invoke  assets
+		      invoke    coffee
+		      create      app/assets/javascripts/sessions.js.coffee
+		      invoke    scss
+		      create      app/assets/stylesheets/sessions.css.scss
+
 	$ rails generate integration_test authentication_pages
 		Creates spec/requests/authentication_pages_spec.rb
-
+			invoke  rspec
+		      create    spec/requests/authentication_pages_spec.rb
 	Create a test in spec/requests/authentication_pages_spec.rb
 		require 'spec_helper'
 
@@ -424,28 +435,28 @@ Sign in, sign out
   		  protect_from_forgery with: :exception
   		  include SessionsHelper
 
-  		def new
-		end
-
-		def create
-			#render 'new'
-			user = User.find_by(email: params[:session][:email].downcase)
-			if user && user.authenticate(params[:session][:password])
-			    # Sign the user in and redirect to the user's show page.
-			    sign_in user  #call method
-      			redirect_to user #redirect to user
-
-			else
-			    # Create an error message and re-render the signin form.
-			    #flash[:error] = 'Invalid email/password combination' # Not quite right!
-			    #Now to avoid repetition in case of calling another page.
-	      		flash.now[:error] = 'Invalid email/password combination'
-	      		render 'new'				
+  			def new
 			end
-		end
 
-		def destroy
-		end
+			def create
+				#render 'new'
+				user = User.find_by(email: params[:session][:email].downcase)
+				if user && user.authenticate(params[:session][:password])
+				    # Sign the user in and redirect to the user's show page.
+				    sign_in user  #call method
+	      			redirect_to user #redirect to user
+
+				else
+				    # Create an error message and re-render the signin form.
+				    #flash[:error] = 'Invalid email/password combination' # Not quite right!
+				    #Now to avoid repetition in case of calling another page.
+		      		flash.now[:error] = 'Invalid email/password combination'
+		      		render 'new'				
+				end
+			end
+
+			def destroy
+			end
 	in pp/views/sessions/new.html.erb, insert a code
 		<% provide(:title, "Sign in") %>
 		<h1>Sign in</h1>
@@ -487,7 +498,7 @@ Sign in, sign out
 		$ bundle exec rspec spec/requests/authentication_pages_spec.rb -e "signin with invalid information"
 			- Still error
 	Sigin
-		In app/controller/sessions_controller.rb
+		In app/controller/sessions_controller.rb calls the methods
 			sign_in user
       		redirect_to user
      Remember me
@@ -496,12 +507,13 @@ Sign in, sign out
   		include SessionsHelper
 
   		$ rails generate migration add_remember_token_to_users
-
+		  invoke  active_record
+    		create    db/migrate/20131117051539_add_remember_token_to_users.rb
   		In user_spec.rb
 			it { should respond_to(:password_confirmation) }
   			it { should respond_to(:remember_token) }
 			it { should respond_to(:authenticate) }
-		In db/migrate/[ts]_add_remember_token_to_users.rb
+		In db/migrate/20131117051539_add_remember_token_to_users.rb
 			class AddRememberTokenToUsers < ActiveRecord::Migration
 			  def change
 			    add_column :users, :remember_token, :string
@@ -554,7 +566,13 @@ Sign in, sign out
 			!current_user.nil?
 		end
 		change app/views/layouts/_header.html.erb
-
+			Include: 
+			<% if signed_in? %>
+				<li><%= link_to "Sign out", signout_path, method: "delete" %></li>
+				...
+	        <% else %>
+	        	<li><%= link_to "Sign in", signin_path %></li>
+	       	<% end %>
 	Sigin upon Signup
 	    Create a new test in spec/requests/user_pages_spec.rb
 
@@ -571,41 +589,40 @@ Sign in, sign out
 			    @user = User.new(user_params)
 			    if @user.save
 			      sign_in @user
-			      flash[:success] = "Welcome to the Sample App!"
-			      redirect_to @user
-			    else
-			      render 'new'
-			    end
-			end
+			      ...
 	Siging out
 		spec/requests/authentication_pages_spec.rb
-			describe "followed by signout" do
+		 	describe "with valid information" do
+		      let(:user) { FactoryGirl.create(:user) }
+
+			  # Method declared in spec//support/utilities.rb
+	      	  #simulate the use interaction filling the fields
+		      before { valid_signin(user) }
+
+			  describe "followed by signout" do
 		        before { click_link "Sign out" }
 		        it { should have_link('Sign in') }
+		      end
+
+		      it { should have_title(user.name) }
+		      it { should have_link('Users',       href: users_path) }
+		      it { should have_link('Profile',     href: user_path(user)) }
+		      it { should have_link('Settings',    href: edit_user_path(user)) }
+		      it { should have_link('Sign out',    href: signout_path) }
+		      it { should_not have_link('Sign in', href: signin_path) }
 		    end
+		  end
 		in sessions_helper.rb
 			  def sign_out
 			    self.current_user = nil
 			    cookies.delete(:remember_token)
 			  end
-	Using Cucumber - BDD test
-
-		Addin cucumber-rails in GemFile
-			gem 'cucumber-rails', '1.4.0', :require => false
-  			gem 'database_cleaner', github: 'bmabey/database_cleaner'
-		$ bundle install
-		- Generate files for cucumber in features
-			$ rails generate cucumber:install
-
-		in features/signing_in.feature
-			Create a feature
-		$ bundle exec cucumber features/
-			Will have errors
-		Create features/step_definitions/authentication_steps.rb
-		- Run test again
+		in controllers/application_controller.rb
+			include SessionsHelper
 	in spec/support/utilities.rb
 		It is possible to create methods to be used in test.
 		Ex:
+
 			def valid_signin(user)
 			  fill_in "Email",    with: user.email
 			  fill_in "Password", with: user.password
