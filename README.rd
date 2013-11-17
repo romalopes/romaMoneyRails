@@ -619,6 +619,3 @@ Sign in, sign out
 		$ git push
 		$ git push heroku
 		$ heroku run rake db:migrate
-
-
-
