@@ -29,13 +29,8 @@
   <div class="navbar-inner" style="padding:0px">
     <div class="container" style="padding:0 0 5px 5px">
       <%= link_to image_tag("home.png", alt: "Roma Money Rails",:size => "30x30", :title => "Click here to return to Home"), root_path, id: "logo" %>
-      <% if signed_in? %>
-        <small style="color:lightgray">
-          <%= current_user.name %>
-        </small>
-      <%end%>
       <nav>
-        <ul class="nav pull-right">
+        <ul class="nav pull-left">
           <li><%= link_to "Home", root_path %></li>
           <li><%= link_to "Help", help_path %></li>
           <% if signed_in? %>
@@ -56,8 +51,16 @@
           <%else%>
             <li><%= link_to "Sign in", signin_path %></li>
           <% end %>
-
         </ul>
+        <% if signed_in? %>
+          <ul class="nav pull-right" style="padding:8px 5px 0px 5px">
+            <li ><%= gravatar_for current_user, {size:30} %></li>
+                <li> 
+                  <small style="color:lightgray"><%= current_user.name %> </small>
+                </li>
+          </ul>
+        <%end%>
+
       </nav>
     </div>
   </div>

@@ -1,1 +1,27 @@
-_infoAccount.html.erb
+<div class="row">
+	<div class="span4" style="background-color:lightgray;padding:10px; margin-bottom:10px">
+		<b>Current Account:</b> Account Name
+		<p><b>Balance:</b> $ 100000
+    	<div class="center">
+	        <%= link_to  "Add Transaction", root_path, class: "btn btn-small btn-primary" %>
+    	</div>
+	</div>
+</div>    	
+<div class="row">
+	<div class="span4">    
+		<div class="dropdown center" style="padding:10px">
+	          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+	            Accounts <b class="caret"></b>
+	          </a>
+	          <ul class="dropdown-menu">
+	            <li>Account A</li>
+	            <li>Account B</li>
+	            <li>Account C</li>
+	          </ul>
+    	</div>
+
+    	<div class="center">
+	        <%= link_to  "New Account", root_path, class: "btn btn-medium btn-primary" %>
+    	</div>
+	</div>
+</div>

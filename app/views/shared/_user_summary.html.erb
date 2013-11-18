@@ -1,0 +1,12 @@
+
+	INSIDE _user_summary
+  <section>
+    <p><%= gravatar_for current_user, {size:80} %>
+    <h4>
+      <p><%= current_user.name %>
+    </h4>
+    <p>Joined on Jun 08, 2013
+  </section>
+  
+  <%= render 'shared/infoAccount' %>
+  

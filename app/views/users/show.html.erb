@@ -2,10 +2,10 @@
 <div class="row">
   <aside class="span4">
     <% if signed_in? %>
-      <%= render 'users/user_summary' %>  
+      <%= render 'shared/user_summary' %>  
     <% end%>
   </aside>
   <div class="span8">
-    INSIDE SHOW span8 <%= @user.name %>, <%= @user.email %>
+      <%= render 'shared/transaction_history' %>  
    </div>
 </div>

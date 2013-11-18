@@ -3,10 +3,12 @@
 	
 	<div class="row">
 	  <aside class="span4">
-	      <%= render 'users/user_summary' %>  
+	      <%= render 'shared/user_summary' %>  
 	  </aside>
 	  <div class="span8">
-	    INSIDE INDEX  <%= current_user.name %>, <%= current_user.email %>
+	  	-----------------------------------------------------------------------------------------------
+	    <%= render 'shared/transaction_history' %>  
+	     <%= current_user.name %>, <%= current_user.email %>
 	   </div>
 	</div>	
 
