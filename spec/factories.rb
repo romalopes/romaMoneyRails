@@ -22,7 +22,7 @@ FactoryGirl.define do
   factory :account do
     name "Account1"
     description "First Account"
-    balance 0.0
+    balance 1.0
     user
   end
   #user.current_account_id = account.id

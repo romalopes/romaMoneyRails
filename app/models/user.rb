@@ -22,8 +22,8 @@ class User < ActiveRecord::Base
     end
 
     def save_current_account_Id(id)
-    	current_account_id = id
-    	save
+    	#current_account_id = id
+    	#save
     end
 
 	def User.new_remember_token
