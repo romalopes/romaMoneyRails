@@ -9,9 +9,4 @@ module ApplicationHelper
       "#{base_title} | #{page_title}"
     end
   end
-
-
-  def signed_in?
-	false
-  end
 end

@@ -636,3 +636,350 @@ Sign in, sign out
 		$ git push
 		$ git push heroku
 		$ heroku run rake db:migrate
+Updating, showing, and deleting users
+	$ git checkout -b updating-users
+	Updating
+		While anyone can sign up, only the current user can update
+		Only authorized users edit and update
+	New tests in spec/requests/user_pages_spec.rb
+		  describe "edit" do
+		    let(:user) { FactoryGirl.create(:user) }
+		    before { visit edit_user_path(user) }
+
+		    describe "page" do
+		      it { should have_content("Update your profile") }
+		      it { should have_title("Edit user") }
+		      it { should have_link('change', href: 'http://gravatar.com/emails') }
+		    end
+
+		    describe "with invalid information" do
+		      before { click_button "Save changes" }
+
+		      it { should have_content('error') }
+		    end
+		  end
+	Add a method in users_controller.rb
+		def edit
+      		@user = User.find(params[:id])
+    	end
+    create a file views/users/edit.html.erb
+    change in _header.html.erb
+       <%= link_to "Settings", edit_user_path(current_user) %>
+    include method to update in users_controller.rb
+	  def update
+	    @user = User.find(params[:id])
+	    if @user.update_attributes(user_params)
+	      flash[:success] = "Profile updated"
+	      redirect_to @user
+	    else
+	      render 'edit'
+	    end
+	  end	
+	- Authorization	  
+		1o. Requiring signed-in users
+			create test in authentication_pages_spec.rb.
+			Use path to request directy to /users/1
+			If call edit_user_path, should go to sign in.
+			describe "authorization" do
+
+			    describe "for non-signed-in users" do
+			      let(:user) { FactoryGirl.create(:user) }
+
+			      describe "in the Users controller" do
+
+			        describe "visiting the edit page" do
+			          before { visit edit_user_path(user) }
+			          it { should have_title('Sign in') }
+			        end
+
+			        describe "submitting to the update action" do
+			          before { patch user_path(user) }
+			          specify { expect(response).to redirect_to(signin_path) }
+			        end
+			      end
+			    end
+			end
+
+		2o. In users_controller.rb
+			class UsersController < ApplicationController
+			  before_action :signed_in_user, only: [:edit, :update]
+
+			In session_helper.rb
+				# Before filters
+			    def signed_in_user
+			      redirect_to signin_url, notice: "Please sign in." unless signed_in?
+			    end
+	- Now Requiring the right user
+		1o. Include a test in authentication_pages_spec.rb
+		 	describe "as wrong user" do
+		      let(:user) { FactoryGirl.create(:user) }
+		      let(:wrong_user) { FactoryGirl.create(:user, email: "wrong@example.com") }
+		      before { sign_in user, no_capybara: true }
+
+		      describe "submitting a GET request to the Users#edit action" do
+		        before { get edit_user_path(wrong_user) }
+		        specify { expect(response.body).not_to match(full_title('Edit user')) }
+		        specify { expect(response).to redirect_to(root_url) }
+		      end
+
+		      describe "submitting a PATCH request to the Users#update action" do
+		        before { patch user_path(wrong_user) }
+		        specify { expect(response).to redirect_to(root_url) }
+		      end
+		    end
+		2o Include code in users_controllers.rb
+			  before_action :correct_user,   only: [:edit, :update]
+
+			  AND
+
+			   def correct_user
+			      @user = User.find(params[:id])
+			      redirect_to(root_url) unless current_user?(@user)
+  		       end
+  		       - current_user is defined in sessions_helper.rb
+					  def current_user?(user)
+					    user == current_user
+					  end
+	Friendly forwarding
+		- If I click in one link, but I am not logged in, system send me to sign in page and then send me back to old page
+		1o Include a test in authentication_pages_spec.rb
+			describe "when attempting to visit a protected page" do
+		        before do
+		          visit edit_user_path(user)
+		          fill_in "Email",    with: user.email
+		          fill_in "Password", with: user.password
+		          click_button "Sign in"
+		        end
+
+		        describe "after signing in" do
+
+		          it "should render the desired protected page" do
+		            expect(page).to have_title('Edit user')
+		          end
+		        end
+		    end
+		2o In sessions_helper.rb, make store the location of the request and redirect later.
+			Put the url in session and then redirect to this url.
+		  def redirect_back_or(default)
+		    redirect_to(session[:return_to] || default)
+		    session.delete(:return_to)
+		  end
+
+		  def store_location
+		    session[:return_to] = request.url if request.get?
+		  end
+		3o Add the store_location to signed_in_user in UsersController
+		    def signed_in_user
+		      unless signed_in?
+		        store_location
+		        redirect_to signin_url, notice: "Please sign in."
+		      end
+		    end
+		4o Use the redirect_back_or in method create of SessionController
+			sign_in user
+      		redirect_back_or user
+    Showing all users
+    	1o include a test in authentication_pages_spec.rb
+	    	describe "visiting the user index" do
+	          before { visit users_path }
+	          it { should have_title('Sign in') }
+	        end
+	        - users_path goes to index of users_controller
+	    2o In UserController
+	    	- Include index
+	    		before_action :signed_in_user, only: [:index, :edit, :update]
+	    	- Create method index
+	    		def index
+					@users = User.all
+	    		end
+
+	    3o In spec/requests/user_pages_spec.rb
+	    	Include test for index.
+
+		    	describe "index" do
+				    before do
+				      sign_in FactoryGirl.create(:user)
+				      FactoryGirl.create(:user, name: "Bob", email: "bob@example.com")
+				      FactoryGirl.create(:user, name: "Ben", email: "ben@example.com")
+				      visit users_path
+				    end
+
+				    it { should have_title('All users') }
+				    it { should have_content('All users') }
+
+				    it "should list each user" do
+				      User.all.each do |user|
+				        expect(page).to have_selector('li', text: user.name)
+				      end
+				    end
+				end
+		4o Create app/views/users/index.html.erb
+		5o Include CSS for users.
+		6o Include test in authentication_pages_spec.rb
+			it { should have_link('Users',       href: users_path) }
+		7o Include in _header.html.erb
+			<% if signed_in? %>
+            <li><%= link_to "Users", users_path %></li>
+    Sample Users (like bootstrap)
+    	1. Include Faker in GemFile
+    		gem 'faker', '1.1.2'
+    	2. Populate data in lib/tasks/sample_data.rake
+
+    	3. run bundle to populate db
+    		$ bundle exec rake db:reset
+			$ bundle exec rake db:populate
+			$ bundle exec rake test:prepare
+	Pagination
+		Use https://github.com/mislav/will_paginate/wiki . There are many others
+		1. Include in GemFile
+			gem 'will_paginate', '3.0.4'
+			gem 'bootstrap-will_paginate', '0.0.9'
+		2. 
+			- Test for a "div" with CSS class "pagination"
+			- Veirfy that the correct users appear on the first page of results.
+			2.1 Define a sequence for test in spec/factories.rb
+				FactoryGirl.define do
+				  factory :user do
+				    sequence(:name)  { |n| "Person #{n}" }
+				    sequence(:email) { |n| "person_#{n}@example.com"}
+				    password "foobar"
+				    password_confirmation "foobar"
+				  end
+				end
+		3. Change test in spec/requests/user_pages_spec.rb
+				describe "index" do
+				    let(:user) { FactoryGirl.create(:user) }
+				    before(:each) do
+				      sign_in user
+				      visit users_path
+				    end
+
+				    it { should have_title('All users') }
+				    it { should have_content('All users') }
+
+				    describe "pagination" do
+
+				      before(:all) { 30.times { FactoryGirl.create(:user) } }
+				      after(:all)  { User.delete_all }
+
+				      it { should have_selector('div.pagination') }
+
+				      it "should list each user" do
+				        User.paginate(page: 1).each do |user|
+				          expect(page).to have_selector('li', text: user.name)
+				        end
+				      end
+				    end
+				end
+		4. Include pagination in app/views/users/index.html.erb
+		5. Change the index method in users_controller.rb
+		   @users = User.paginate(page: params[:page])
+		6. A possible improvement in index.html.erb
+			<ul class="users">
+			  <% @users.each do |user| %>
+			    <%= render user %>  <!-- Call view/users/_user.html.erb  -->
+			  <% end %>
+			</ul>  
+			-OR 
+			  <ul class="users">
+			  		<%= render @users %>
+			  </ul>
+			Rails knows that @users is related the a iteraction in each user and should call _user.html.erb partial.
+	Deleting Users
+		Administrative users
+			Using a boolean "admin" in user model to idenfify privileged users
+			- admin? boolean method
+			1. Include test in users_spec.rb
+				it { should respond_to(:authenticate) }
+				  it { should respond_to(:admin) }
+
+				  it { should be_valid }
+				  it { should_not be_admin }
+
+				  describe "with admin attribute set to 'true'" do
+				    before do
+				      @user.save!
+				      @user.toggle!(:admin)
+				    end
+
+				    it { should be_admin }
+				end
+				- toggle! switch a value between true and false.
+			2. Include the attribute admin in User table
+				$ rails generate migration add_admin_to_users admin:boolean
+					 invoke  active_record
+      					create    db/migrate/20131117074343_add_admin_to_users.rb
+				- Generates this
+					class AddAdminToUsers < ActiveRecord::Migration
+					  def change
+					    add_column :users, :admin, :boolean, default: false
+					  end
+					end
+					- just include a attribute default to false.
+			3. Migrate
+				$ bundle exec rake db:migrate
+				$ bundle exec rake test:prepare					
+				user = User.find(101)
+				>> user.admin?
+				=> false
+				>> user.toggle!(:admin)
+				=> true
+				>> user.admin?
+			4. Reset db
+				$ bundle exec rake db:reset
+				$ bundle exec rake db:populate
+				$ bundle exec rake test:prepare
+		5. Include test in user_pages_spec.rb
+			it { should have_link('delete', href: user_path(User.first)) }
+			it "should be able to delete another user" do
+			  expect do
+			    click_link('delete', match: :first)
+			  end.to change(User, :count).by(-1)
+			end
+			it { should_not have_link('delete', href: user_path(admin)) }
+		6. Change app/views/users/_user.html.erb to allow only admin 
+			<li>
+			  <%= gravatar_for user, size: 52 %>
+			  <%= link_to user.name, user %>
+			  <% if current_user.admin? && !current_user?(user) %>
+			    | <%= link_to "delete", user, method: :delete,
+			                                  data: { confirm: "You sure?" } %>
+			  <% end %>
+			</li>
+		7. In users_controller.rb
+			def destroy
+			    User.find(params[:id]).destroy
+			    flash[:success] = "User deleted."
+			    redirect_to users_url
+			end
+		8. Adding a test to avoid malicious delete
+			describe "as non-admin user" do
+		      let(:user) { FactoryGirl.create(:user) }
+		      let(:non_admin) { FactoryGirl.create(:user) }
+
+		      before { sign_in non_admin, no_capybara: true }
+
+		      describe "submitting a DELETE request to the Users#destroy action" do
+		        before { delete user_path(user) }
+		        specify { expect(response).to redirect_to(root_url) }
+		      end
+		    end
+		9. In app/controllers/users_controller.rb
+			Set that only admin can destroy.
+			 before_action :admin_user,     only: :destroy
+
+			def admin_user
+      			redirect_to(root_url) unless current_user.admin?
+    		end
+    Git
+	    $ git add .
+		$ git commit -m "Finish user edit, update, index, and destroy actions"
+		$ git checkout master
+		$ git merge updating-users
+		$ git push heroku
+		$ heroku pg:reset DATABASE
+		$ heroku run rake db:migrate
+		$ heroku run rake db:populate
+		$ heroku restart
+		$ heroku open
+

@@ -1,6 +1,15 @@
-<% if signed_in? %>
 
-	<h1>Signed In</h1>
+<% if signed_in? %>
+	
+	<div class="row">
+	  <aside class="span4">
+	      <%= render 'users/user_summary' %>  
+	  </aside>
+	  <div class="span8">
+	    INSIDE INDEX  <%= current_user.name %>, <%= current_user.email %>
+	   </div>
+	</div>	
+
 <% else %>
 	<div class="row">
 		<aside class="span4">
@@ -9,7 +18,6 @@
 		</aside>
 		<div class="span8 center" style="background-color:lightgray; padding-bottom:20px">
 	    	<h3>Welcome to the Roma Money Rails</h3>
-
 		    <%= link_to "Sign up", signup_path, class: "btn btn-large btn-primary" %>
 	  	</div>
 	</div>

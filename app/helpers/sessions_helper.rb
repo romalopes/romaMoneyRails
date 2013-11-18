@@ -7,6 +7,7 @@ module SessionsHelper
     cookies.permanent[:remember_token] = remember_token
     user.update_attribute(:remember_token, User.encrypt(remember_token))
     self.current_user = user
+    self.viewed_user = user
   end
 
  def signed_in?
@@ -15,6 +16,10 @@ module SessionsHelper
 
   def current_user=(user)
     @current_user = user
+  end
+
+  def viewed_user=(user)
+    @viewerd_user = user
   end
 
   def current_user
@@ -40,6 +45,7 @@ module SessionsHelper
   end
 
   def sign_out
+    self.viewed_user = nil
     self.current_user = nil
     cookies.delete(:remember_token)
   end

@@ -48,6 +48,8 @@ GEM
       debug_inspector (>= 0.0.1)
     bootstrap-sass (2.3.2.2)
       sass (~> 3.2)
+    bootstrap-will_paginate (0.0.9)
+      will_paginate
     builder (3.1.4)
     capybara (2.1.0)
       mime-types (>= 1.16)
@@ -81,6 +83,8 @@ GEM
     factory_girl_rails (4.3.0)
       factory_girl (~> 4.3.0)
       railties (>= 3.0.0)
+    faker (1.1.2)
+      i18n (~> 0.5)
     ffi (1.9.3)
     figaro (0.7.0)
       bundler (~> 1.0)
@@ -88,7 +92,7 @@ GEM
     font-awesome-rails (4.0.3.0)
       railties (>= 3.2, < 5.0)
     formatador (0.2.4)
-    guard (2.2.3)
+    guard (2.2.4)
       formatador (>= 0.2.4)
       listen (~> 2.1)
       lumberjack (~> 1.0)
@@ -232,6 +236,7 @@ GEM
       execjs (>= 0.3.0)
       json (>= 1.8.0)
     websocket (1.0.7)
+    will_paginate (3.0.4)
     xpath (2.0.0)
       nokogiri (~> 1.3)
 
@@ -243,12 +248,14 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   bootstrap-sass (~> 2.3.2.2)
+  bootstrap-will_paginate (= 0.0.9)
   capybara
   childprocess (= 0.3.6)
   coffee-rails (~> 4.0.0)
   database_cleaner (= 1.0.1)
   email_spec
   factory_girl_rails
+  faker (= 1.1.2)
   figaro
   font-awesome-rails
   guard-bundler
@@ -276,3 +283,4 @@ DEPENDENCIES
   therubyracer
   turbolinks
   uglifier (>= 1.3.0)
+  will_paginate (= 3.0.4)

@@ -1,0 +1,19 @@
+<% provide(:title, "Edit user") %>
+<h1>Update your profile</h1>
+
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@user) do |f| %>
+<!--
+  <form action="/users/1" class="edit_user" id="edit_user_1" method="post">
+  <input name="_method" type="hidden" value="patch" />-->
+
+      <%= render 'fields', f: f %>
+
+      <%= f.submit "Save changes", class: "btn btn-large btn-primary" %>
+    <% end %>
+
+    <%= gravatar_for @user %>
+    <a href="http://gravatar.com/emails" target="_blank">change</a>
+  </div>
+</div>
