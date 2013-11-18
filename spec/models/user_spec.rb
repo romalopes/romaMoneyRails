@@ -16,6 +16,9 @@ describe User do
 	it { should respond_to(:password_digest) }
 	it { should respond_to(:password) }
 	it { should respond_to(:password_confirmation) }
+	it { should respond_to(:accounts) }
+	it { should respond_to(:current_account_id) }
+
 
 	it { should respond_to(:remember_token) }
 	it { should respond_to(:authenticate) }
@@ -86,5 +89,24 @@ describe User do
 		end
 	end
 
+	describe "account associations" do
+
+	    before { @user.save }
+
+	    let!(:account1) do
+	      FactoryGirl.create(:account, user: @user)
+	    end
+		let!(:account2) do
+	      FactoryGirl.create(:account, user: @user)
+	    end
+	 	it "should destroy associated account" do
+		      accounts = @user.accounts.to_a
+		      @user.destroy
+		      expect(accounts).not_to be_empty
+		      accounts.each do |account|
+		        expect(Account.where(id: account.id)).to be_empty
+		      end
+	    end
+	end	
 end
 

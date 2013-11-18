@@ -983,3 +983,110 @@ Updating, showing, and deleting users
 		$ heroku restart
 		$ heroku open
 
+Include Acconts
+	git checkout -b include-accounts
+	- Generate first Model (Account)
+		$ rails generate model Account name:string user_id:integer balance:double description:string
+			 invoke  active_record
+		      create    db/migrate/20131118040337_create_accounts.rb
+		      create    app/models/account.rb
+		      invoke    rspec
+		      create      spec/models/account_spec.rb
+		      invoke      factory_girl
+		      create        spec/factories/accounts.rb
+		- Add index to users
+			class CreateAccounts < ActiveRecord::Migration
+			  def change
+			    create_table :accounts do |t|
+			      t.string :name
+			      t.integer :user_id
+			      t.double :balance
+			      t.string :description
+
+			      t.timestamps
+			    end
+			    add_index :accounts, [:user_id, :created_at]
+			  end
+			end
+		Migrate and Prepare to test
+			$ bundle exec rake db:migrate	
+			$ bundle exec rake test:prepare	
+		- In app/models/account.rb
+			class Account < ActiveRecord::Base
+			  belongs_to :user
+			  validates :user_id, presence: true
+			  validates :name, presence: true, length: { minimum: 6, maximum: 50 }
+			end
+
+	In app/models/user.rb, include the has_many
+		has_many :accounts, dependent: :destroy
+	And in users_spec.rb
+		it { should respond_to(:accounts) }
+
+		AND
+
+		describe "account associations" do
+		    before { @user.save }
+		    let!(:account1) do
+		      FactoryGirl.create(:account, user: @user)
+		    end
+			let!(:account2) do
+		      FactoryGirl.create(:account, user: @user)
+		    end
+		 	it "should destroy associated account" do
+			      accounts = @user.accounts.to_a
+			      @user.destroy
+			      expect(accounts).not_to be_empty
+			      accounts.each do |account|
+			        expect(Account.where(id: account.id)).to be_empty
+			      end
+		    end
+		end	
+
+	In spec/factories.rb
+		include the creation of account
+			factory :account do
+		    	name "Account1"
+		    	description "First Account"
+		    	balance 0.0
+		    	user
+		  	end
+	In lib/tasks/sample_data, create the accounts
+		def make_accounts
+		    users = User.all
+		    user  = users.first
+
+		    #Create fake accounts
+		    name = "account1"
+		    description = "descriptin of account1"
+		    user.accounts.create!(name: name,description: description)
+
+		        name = "account2"
+		    description = "descriptin of account2"
+		    user.accounts.create!(name: name,description: description)
+		end
+	In home_controller.rb
+		class HomeController < ApplicationController
+		  def index
+		    if signed_in?
+		      @accounts  = current_user.accounts.to_a
+		    end
+		  end
+		end
+	In users_controller.rb
+		def show
+			@user = User.find(params[:id])
+			@accounts  = @user.accounts.to_a
+		end
+	Add current Account to user
+		$ rails generate migration add_current_account_id_to_users current_account_id:integer
+			invoke  active_record
+	      		create    db/migrate/20131118055435_add_current_account_id_to_users.rb
+- Create Account
+	$ rails generate controller Accounts new destroy --no-test-framework
+		- Create a new account
+		- list of accounts(manage account)
+		- Change
+		- Delete
+		- Missing set current account
+		

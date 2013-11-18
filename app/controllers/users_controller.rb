@@ -16,6 +16,8 @@ class UsersController < ApplicationController
 
 	def show
 		@user = User.find(params[:id])
+		@accounts  = @user.accounts.to_a
+		@current_account = @user.current_account
 	end
 
     def create
@@ -56,7 +58,6 @@ class UsersController < ApplicationController
 	end
 
 	def change_to_this
-		puts "Parameters xxxxx #{params}"
 		@viewed_user = User.find(params[:id])
 		@user = @viewed_user
 		@current_user = @viewed_user

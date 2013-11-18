@@ -5,7 +5,9 @@ module UsersHelper
     gravatar_id = Digest::MD5::hexdigest(user.email.downcase)
     size = options[:size]
     gravatar_url = "https://secure.gravatar.com/avatar/#{gravatar_id}?s=#{size}"
-    image_tag(gravatar_url, alt: user.name, class: "gravatar")
+    if Rails.env.development? 
+   		image_tag("home.png", alt: "Roma Money Rails",:size => "30x30", :title => "Click here to return to Home")
+   	else
+    	image_tag(gravatar_url, alt: user.name, class: "gravatar")
   end
-
 end

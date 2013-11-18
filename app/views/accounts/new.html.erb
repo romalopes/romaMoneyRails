@@ -1,0 +1,12 @@
+<% provide(:title, 'Create Account') %>
+<h1>Create a new Account</h1>
+
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@account) do |f| %>
+
+      <%= render 'fields_account', f: f %>
+      <%= f.submit "Create a new account", class: "btn btn-large btn-primary" %>
+    <% end %>
+  </div>
+</div>

@@ -1,6 +1,8 @@
 class User < ActiveRecord::Base
+	has_many :accounts, dependent: :destroy
 
 	before_save { self.email = email.downcase }
+	before_create :create_remember_token
 	
 	######Validation
 	validates :name, presence: true, length: { maximum: 50 }
@@ -12,7 +14,17 @@ class User < ActiveRecord::Base
 	
 	has_secure_password
 
-	before_create :create_remember_token
+	def current_account
+		@account = nil
+		if current_account_id.present?
+      		@account = Account.find(current_account_id)
+      	end
+    end
+
+    def save_current_account_Id(id)
+    	current_account_id = id
+    	save
+    end
 
 	def User.new_remember_token
     	SecureRandom.urlsafe_base64

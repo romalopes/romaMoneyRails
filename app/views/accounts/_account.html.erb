@@ -1,0 +1,12 @@
+<li>
+	<%=account.name%>
+	<p><%=account.description%>
+	<p class="balance-<%=account.how_is_balance%>">
+		<b>Balance:</b> $ <%= account.balance %>
+	</p>
+	<%= link_to "Change", edit_account_path(account) %>
+    | <%= link_to "delete", account, method: :delete,
+                                  data: { confirm: "You sure?" } %>
+	| <%= link_to "change to this Not implemented", root_path %>
+</li>
+

@@ -1,4 +1,6 @@
 RomaMoneyRails::Application.routes.draw do
+  get "accounts/new"
+  get "accounts/destroy"
   #get "users/new"
   root :to => "home#index"
 
@@ -14,7 +16,9 @@ RomaMoneyRails::Application.routes.draw do
 #  match '/about',   to: 'static_pages#about',   via: 'get'
 #  match '/contact', to: 'static_pages#contact', via: 'get'
 
+  match '/createAccount',  to: 'accounts#new',            via: 'get'
 
+  resources :accounts
 
   resources :users do
     member do

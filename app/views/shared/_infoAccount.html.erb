@@ -1,27 +1,37 @@
 <div class="row">
-	<div class="span4" style="background-color:lightgray;padding:10px; margin-bottom:10px">
-		<b>Current Account:</b> Account Name
-		<p><b>Balance:</b> $ 100000
-    	<div class="center">
-	        <%= link_to  "Add Transaction", root_path, class: "btn btn-small btn-primary" %>
-    	</div>
-	</div>
+	<% if @current_account.present? %>
+		<div class="span4" style="background-color:lightgray;padding:10px; margin-bottom:10px">
+			<b>Current Account:</b>
+			<span class="dropdown center" style="padding:10px">
+		          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+		            <%= @current_account.name %> <b class="caret"></b>
+		          </a>
+		          <ul class="dropdown-menu">  
+	            	<% @accounts.each do |account| %>
+	            		<% if account.name != @current_account.name %>
+	    					<li><%= account.name %> </li>
+	    				<%end%>
+		  			<% end %>
+		          </ul>
+	    	</span>
+			<p class="balance-<%=@current_account.how_is_balance%>"><b>Balance:</b> $ <%= @current_account.balance %>
+			 <p>
+    		     Created <%= time_ago_in_words(@current_account.created_at) %> ago.
+    		 </p>
+    		 <p>Created at <%= @current_account.created_at.strftime("%d/%b/%Y") %>
+	    	<div class="center">
+		        <%= link_to  "Add Transaction", root_path, class: "btn btn-small btn-primary" %>
+	    	</div>
+		</div>
+	<%end%>
 </div>    	
 <div class="row">
-	<div class="span4">    
-		<div class="dropdown center" style="padding:10px">
-	          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-	            Accounts <b class="caret"></b>
-	          </a>
-	          <ul class="dropdown-menu">
-	            <li>Account A</li>
-	            <li>Account B</li>
-	            <li>Account C</li>
-	          </ul>
-    	</div>
-
-    	<div class="center">
-	        <%= link_to  "New Account", root_path, class: "btn btn-medium btn-primary" %>
+	<div class="span4">
+		<div class="center" style="padding:10px; margin-bottom:10px">
+	        <%= link_to  "Manage Accounts", accounts_path, class: "btn btn-medium btn-primary" %>
+    	</div>		
+		<div class="center">
+	        <%= link_to  "New Account", createAccount_path, class: "btn btn-medium btn-primary" %>
     	</div>
 	</div>
 </div>

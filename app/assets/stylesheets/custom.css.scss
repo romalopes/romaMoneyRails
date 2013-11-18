@@ -261,30 +261,24 @@ input {
   }
 }
 
-/* microposts */
+/* account */
 
-.microposts {
+.balance-blue {
+  color:blue;
+}
+.balance-red {
+  color:red;
+}
+
+.accounts {
   list-style: none;
-  margin: 10px 0 0 0;
-
+  margin: 0;
   li {
+    overflow: auto;
     padding: 10px 0;
-    border-top: 1px solid #e8e8e8;
-  }
-}
-.content {
-  display: block;
-}
-.timestamp {
-  color: $grayLight;
-}
-.gravatar {
-  float: left;
-  margin-right: 10px;
-}
-aside {
-  textarea {
-    height: 100px;
-    margin-bottom: 5px;
+    border-top: 1px solid $grayLighter;
+    &:last-child {
+      border-bottom: 1px solid $grayLighter;
+    }
   }
 }
