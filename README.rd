@@ -1189,3 +1189,16 @@ Include Acconts
 		- Change shared/transaction_history.html.erb to 
 			render "transactions/transaction"
 		- Copy the equivalent methods from controllers/accounts_controller.rb
+    Git
+	    $ git add .
+		$ git commit -m "Include transaction"
+		$ git checkout master
+		$ git merge include-category
+		$ git push
+		$ git push heroku
+		$ heroku pg:drop DATABASE
+		$ heroku pg:reset DATABASE
+		$ heroku run rake db:migrate
+		$ heroku run rake db:populate
+		$ heroku restart
+		$ heroku open
