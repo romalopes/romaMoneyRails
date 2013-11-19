@@ -1089,4 +1089,59 @@ Include Acconts
 		- Change
 		- Delete
 		- Missing set current account
-		
+- Create Category and GroupCategory
+	For while I will not implement any funtionality for management of Category.  They are created in sample_date.rake.
+	- $ git checkout -b include-category
+	1o Create GroupCategory
+		$ rails generate model GroupCategory name:string image:string type:string
+			invoke  active_record
+		      create    db/migrate/20131118231020_create_group_categories.rb
+		      create    app/models/group_category.rb
+		      invoke    rspec
+		      create      spec/models/group_category_spec.rb
+		      invoke      factory_girl
+		      create        spec/factories/group_categories.rb
+
+	2o Create Category
+		$ rails generate model Category name:string image:string group_category_id:integer
+			invoke  active_record
+		      create    db/migrate/20131118231030_create_categories.rb
+		      create    app/models/category.rb
+		      invoke    rspec
+		      create      spec/models/category_spec.rb
+		      invoke      factory_girl
+		      create        spec/factories/categories.rb
+	3o Include the associations and validations
+		class GroupCategory < ActiveRecord::Base
+			has_many :categories, dependent: :destroy
+
+			validates :name, presence: true, length: { minimum: 2, maximum: 50 }
+			validates :group_type, presence: true, length: { minimum: 2, maximum: 50 }
+		end
+
+		class Category < ActiveRecord::Base
+			belongs_to :group_category
+
+			validates :name, presence: true, length: { minimum: 2, maximum: 50 }
+			validates :group_category_id, presence: true
+		end
+
+	4o
+		$ bundle exec rake db:migrate
+		$ bundle exec rake test:prepare 
+	5o Include some groups and categories in sample_data.rake
+
+    Git
+	    $ git add .
+		$ git commit -m "Include category and groupCategory"
+		$ git checkout master
+		$ git merge include-category
+		$ git push heroku
+		$ heroku pg:drop DATABASE
+		$ heroku pg:reset DATABASE
+		$ heroku run rake db:migrate
+		$ heroku run rake db:populate
+		$ heroku restart
+		$ heroku open
+
+- Create Transaction

@@ -3,6 +3,8 @@ namespace :db do
   task populate: :environment do
     make_users
     make_accounts
+    make_group_categories
+    make_categories
   end
 end
 
@@ -57,5 +59,47 @@ def make_accounts
     name = "account3"
     description = "descriptin of account3"
     user.accounts.create!(name: name,description: description, balance:-20)
+
+end
+
+def make_group_categories
+
+  GroupCategory.create!(name: "Income",
+                 image: "groupCategory/groupCategory.png",
+                 group_type: "positive")
+
+  GroupCategory.create!(name: "Expense",
+                 image: "groupCategory/groupCategory.png",
+                 group_type: "negative")
+end
+
+def make_categories
+  groupCategories = GroupCategory.all
+  income = groupCategories[0]
+  puts income.name
+  income.categories.create!(name: "Award",description: "", image:"category/category.png")
+  income.categories.create!(name: "Salary",description: "", image:"category/category.png")
+  income.categories.create!(name: "Selling",description: "", image:"category/category.png")
+  income.categories.create!(name: "Donation",description: "", image:"category/category.png")
+  income.categories.create!(name: "Others",description: "", image:"category/category.png")
+
+  expense = groupCategories[1]
+  puts expense.name
+  expense.categories.create!(name: "Clothing",description: "", image:"category/category.png")
+  expense.categories.create!(name: "Entertainment",description: "", image:"category/category.png")
+  expense.categories.create!(name: "Family",description: "", image:"category/category.png")
+  expense.categories.create!(name: "Food",description: "", image:"category/category.png")
+  expense.categories.create!(name: "House",description: "", image:"category/category.png")
+  expense.categories.create!(name: "Medical",description: "", image:"category/category.png")
+  expense.categories.create!(name: "Shopping",description: "", image:"category/category.png")
+  expense.categories.create!(name: "Study",description: "", image:"category/category.png")
+  expense.categories.create!(name: "Transport",description: "", image:"category/category.png")
+  expense.categories.create!(name: "Travel",description: "", image:"category/category.png")
+  expense.categories.create!(name: "Others",description: "", image:"category/category.png")  
+
+  # Category
+  #       t.string :name
+  #     t.string :image
+  #     t.integer :group_category_id
 
 end
