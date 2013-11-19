@@ -1,5 +1,5 @@
 <% provide(:title, 'All Accounts') %>
-<div class="row">
+<div od="all_accounts" class="row">
   <aside class="span4">
       <%= render 'shared/user_summary' %>  
   </aside>
@@ -13,6 +13,6 @@
 	    <%= render account %>  <!-- Call view/accounts/_account.html.erb  -->
 	  <% end %>
 	</ul>  
-
-	<%= will_paginate %>   </div>
+	<%= will_paginate %>   
+  </div>
 </div>	

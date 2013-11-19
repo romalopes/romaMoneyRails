@@ -10,6 +10,14 @@ class AccountsController < ApplicationController
 
   def create
     @account = current_user.accounts.build(account_params)
+
+    oldAccount = current_user.accounts.find_by(name:@account.name)
+    if oldAccount.present?
+      flash[:error] = "Account #{@account.name} already exists."
+      render 'new'
+      return
+    end
+
     if @account.save
       flash[:success] = "Account #{@account.name} created!"
       redirect_to root_url
@@ -45,8 +53,7 @@ class AccountsController < ApplicationController
 #      if current_user.current_account_id == account_id
         current_user.save_current_account_Id(Account.first.id)
  #     end
-
-      
+     
       flash[:success] = "Account deleted."
       redirect_to accounts_path
   end

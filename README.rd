@@ -1136,6 +1136,7 @@ Include Acconts
 		$ git commit -m "Include category and groupCategory"
 		$ git checkout master
 		$ git merge include-category
+		$ git push
 		$ git push heroku
 		$ heroku pg:drop DATABASE
 		$ heroku pg:reset DATABASE
@@ -1145,3 +1146,46 @@ Include Acconts
 		$ heroku open
 
 - Create Transaction
+	- $ git checkout -b include-transaction
+	- Create the model to transaction
+		$ rails generate model Transaction name:string category:references account:references value:decimal description:string date:datetime
+	      invoke  active_record
+	      create    db/migrate/20131119010200_create_transactions.rb
+	      create    app/models/transaction.rb
+	      invoke    rspec
+	      create      spec/models/transaction_spec.rb
+	      invoke      factory_girl
+	      create        spec/factories/transactions.rb
+
+	      In models/account.rb
+	      	has_many :transactions, dependent: :destroy
+	      
+	- Create the controller to transaction
+		$ rails generate controller Transactions new create edit update destroy --no-test-framework
+		 create  app/controllers/transctions_controller.rb
+		       route  get "transactions/destroy"
+		       route  get "transactions/update"
+		       route  get "transactions/edit"
+		       route  get "transactions/create"
+		       route  get "transactions/new"
+		      invoke  erb
+		      create    app/views/transactions
+		      create    app/views/transactions/new.html.erb
+		      create    app/views/transactions/create.html.erb
+		      create    app/views/transactions/edit.html.erb
+		      create    app/views/transactions/update.html.erb
+		      create    app/views/transactions/destroy.html.erb
+		      invoke  helper
+		      create    app/helpers/transactions_helper.rb
+		      invoke  assets
+		      invoke    coffee
+		      create      app/assets/javascripts/transactions.js.coffee
+		      invoke    scss
+		      create      app/assets/stylesheets/transactions.css.scss
+		Remove the "route get ..."
+			include resources transactions
+	- Crude transaction
+		- Copy the equivalent files from view/accounts
+		- Change shared/transaction_history.html.erb to 
+			render "transactions/transaction"
+		- Copy the equivalent methods from controllers/accounts_controller.rb

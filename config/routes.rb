@@ -1,6 +1,12 @@
 RomaMoneyRails::Application.routes.draw do
-  get "accounts/new"
-  get "accounts/destroy"
+   #get "transactions/new"
+  # get "transactions/create"
+  # get "transactions/edit"
+  # get "transactions/update"
+  # get "transactions/destroy"
+  
+  # get "accounts/new"
+  # get "accounts/destroy"
   #get "users/new"
   root :to => "home#index"
 
@@ -17,12 +23,16 @@ RomaMoneyRails::Application.routes.draw do
 #  match '/contact', to: 'static_pages#contact', via: 'get'
 
   match '/createAccount',  to: 'accounts#new',            via: 'get'
+  match '/createTransaction',  to: 'transactions#new',            via: 'get'
+
 
   resources :accounts
 
+  resources :transactions
+
   resources :users do
     member do
-      get :change_to_this   #define following_user_path, followers_user_path
+      get :change_to_this, :change_account   #define following_user_path, followers_user_path
     end
   end
 

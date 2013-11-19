@@ -1,0 +1,2 @@
+$("#transaction_history").html("<%= escape_javascript(render('transactions/transaction_history')) %>")
+$("#account_balance").html('<%= current_user.current_account.balance %>')

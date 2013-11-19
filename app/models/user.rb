@@ -21,11 +21,6 @@ class User < ActiveRecord::Base
       	end
     end
 
-    def save_current_account_Id(id)
-    	#current_account_id = id
-    	#save
-    end
-
 	def User.new_remember_token
     	SecureRandom.urlsafe_base64
   	end

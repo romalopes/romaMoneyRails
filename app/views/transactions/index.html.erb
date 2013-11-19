@@ -1,0 +1,19 @@
+<% provide(:title, 'All Transactions') %>
+<div class="row">
+  <aside class="span4">
+      <%= render 'shared/user_summary' %>  
+  </aside>
+  <div class="span8">
+	<h3>All Transactions</h3>
+
+	<%= will_paginate %>
+
+	<ul class="transactions">
+	  <% @transactions.each do |transaction| %>
+	    <%= render transaction %>  <!-- Call view/accounts/_transaction.html.erb  -->
+	  <% end %>
+	</ul>  
+
+	<%= will_paginate %>   </div>
+</div>	
+

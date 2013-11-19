@@ -5,6 +5,7 @@ namespace :db do
     make_accounts
     make_group_categories
     make_categories
+    make_transactions
   end
 end
 
@@ -96,10 +97,39 @@ def make_categories
   expense.categories.create!(name: "Transport",description: "", image:"category/category.png")
   expense.categories.create!(name: "Travel",description: "", image:"category/category.png")
   expense.categories.create!(name: "Others",description: "", image:"category/category.png")  
+end
 
-  # Category
-  #       t.string :name
-  #     t.string :image
-  #     t.integer :group_category_id
+def make_transactions
+  study_category = Category.find_by(name:"Study")
+  transport_category = Category.find_by(name:"Transport")
+  salary_category = Category.find_by(name:"Salary")
+
+  user  = User.first
+  account = user.accounts.find_by(name:"account1")
+
+  Transaction.create!(name:"Transaction Salary",
+                      value: 20,
+                      date: Date.parse(Time.now.to_s),
+                      category:salary_category,
+                      account:account)
+
+  Transaction.create!(name:"Transaction Study",
+                      value: 10,
+                      date: Date.parse(Time.now.to_s),
+                      category:study_category,
+                      account:account)
+
+  Transaction.create!(name:"Transaction Transport",
+                      value: 20,
+                      date: Date.parse(Time.now.to_s),
+                      category:study_category,
+                      account:account)
+
+      #   t.string :name
+      # t.references :castegory, index: true
+      # t.references :account, index: true
+      # t.decimal :value
+      # t.string :description
+      # t.datetime :date
 
 end

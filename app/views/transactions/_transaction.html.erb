@@ -1,0 +1,17 @@
+<li>
+	<%=transaction.name%>
+	<p><%=transaction.description%>
+
+	<p class="value-<%=transaction.how_is_value%>">
+		<b>Value:</b> $ <%= transaction.value %>
+	</p>
+	<p>Date <%= transaction.date.strftime("%H:%M:%S %d/%b/%Y") %>
+
+	<p>Account <%= transaction.account.name %>
+	<p>Category <%= transaction.category.name %>
+	<p>
+	<%= link_to "Change", edit_transaction_path(transaction) %>
+    | <%= link_to "delete", transaction, method: :delete, remote: true,
+                                  data: { confirm: "You sure?" } %>
+
+</li>

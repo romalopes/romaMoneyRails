@@ -4,9 +4,9 @@ class UsersController < ApplicationController
   	before_action :correct_user,   only: [:edit, :update]
    	before_action :admin_user,     only: :destroy
 
+	include SessionsHelper
 
 	def index
-    	#@users = User.all
     	@users = User.paginate(page: params[:page])
   	end
 
@@ -14,10 +14,24 @@ class UsersController < ApplicationController
 		@user = User.new
 	end
 
+	def change_account
+		# @user = User.find(params[:id])
+		@account = Account.find(params[:id])
+
+		if current_user.update_attributes({:current_account_id => @account.id})
+			flash[:success] = "#{params}  #{@account} #{@account.id} #{current_user.current_account.name} "
+		else
+			flash[:error] = "#{params}  #{@account} #{@account.id} #{current_user.current_account.name} "
+		end
+		
+		redirect_to root_url
+	end
+
 	def show
 		@user = User.find(params[:id])
 		@accounts  = @user.accounts.to_a
 		@current_account = @user.current_account
+		redirect_to root_url
 	end
 
     def create

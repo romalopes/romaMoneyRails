@@ -1,0 +1,20 @@
+ <%= render 'shared/error_messages', object: f.object %>
+
+<%= f.text_field :name , :placeholder=>"Name"%>
+
+<%= f.text_area :description, rows:3, :placeholder=>"Description"%>
+
+<%= f.text_field :value, :placeholder=>"Value"%>
+
+<%= f.label :category %>
+<%= select_tag("category", options_from_collection_for_select(Category.all, :id, :name, :prompt => true)) %>
+<%if false %>
+
+<%=f.select :category, Category.all.collect {|c| [c.name, c.id]} %>
+<%end%>
+
+<%= f.label :date %>
+<%= f.date_field(:date, :placeholder=>"Date", :value => Date.parse(Time.now.to_s)) %>
+
+
+

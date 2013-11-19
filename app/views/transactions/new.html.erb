@@ -1,0 +1,12 @@
+<% provide(:title, 'Create Transaction') %>
+<h1>Create a new Transaction</h1>
+
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@transaction, controller: 'transactions', action:'createStandard') do |f| %>
+
+      <%= render 'fields_transaction', f: f %>
+      <%= f.submit "Create a new transaction", class: "btn btn-large btn-primary" %>
+    <% end %>
+  </div>
+</div>

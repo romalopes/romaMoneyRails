@@ -153,6 +153,14 @@ footer {
 
 /* miscellaneous */
 
+
+.value-blue {
+  color:blue;
+}
+.value-red {
+  color:red;
+}
+
 .debug_dump {
   clear: both;
   float: left;
@@ -263,14 +271,21 @@ input {
 
 /* account */
 
-.balance-blue {
-  color:blue;
-}
-.balance-red {
-  color:red;
+.accounts {
+  list-style: none;
+  margin: 0;
+  li {
+    overflow: auto;
+    padding: 10px 0;
+    border-top: 1px solid $grayLighter;
+    &:last-child {
+      border-bottom: 1px solid $grayLighter;
+    }
+  }
 }
 
-.accounts {
+/* transactions */
+.transactions {
   list-style: none;
   margin: 0;
   li {
