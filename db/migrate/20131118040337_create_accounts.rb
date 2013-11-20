@@ -3,7 +3,7 @@ class CreateAccounts < ActiveRecord::Migration
     create_table :accounts do |t|
       t.string :name
       t.integer :user_id
-      t.bigdecimal :balance
+      t.decimal :balance
       t.string :description
 
       t.timestamps

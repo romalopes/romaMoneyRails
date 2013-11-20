@@ -4,7 +4,7 @@ class CreateTransactions < ActiveRecord::Migration
       t.string :name
       t.references :category, index: true
       t.references :account, index: true
-      t.bigdecimal :value
+      t.decimal :value
       t.string :description
       t.datetime :date
 
