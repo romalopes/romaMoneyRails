@@ -7,6 +7,7 @@
 	<%= link_to "Change", edit_account_path(account) %>
     | <%= link_to "delete", account, method: :delete,
                                   data: { confirm: "You sure?" } %>
-	| <%= link_to "change to this Not implemented", root_path %>
+	| <%= link_to "change to this", change_account_user_path(account) %>
+    		
 </li>
 

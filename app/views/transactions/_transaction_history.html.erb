@@ -1,14 +1,12 @@
-_transaction_history.html.erb
-<div id="transaction_history">
-	<h3>Transactions</h3>
-
+ <div id="history_of_transactions" >
+ 	<%= render 'layouts/messages' %> 
 	<%= will_paginate %>
 
 	<ul class="transactions">
 	  <% @transactions.each do |transaction| %>
-	    <%= render transaction %>  <!-- Call view/transactions/_transaction.html.erb  -->
+	    <%= render transaction %>  <!-- Call view/accounts/_transaction.html.erb  -->
 	  <% end %>
-	</ul>
-	
+	</ul>  
 
-</div>
+	<%= will_paginate %>   </div>
+</div>	

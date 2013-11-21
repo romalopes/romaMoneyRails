@@ -29,7 +29,7 @@ RomaMoneyRails::Application.routes.draw do
   resources :accounts
 
   resources :transactions
-
+    
   resources :users do
     member do
       get :change_to_this, :change_account   #define following_user_path, followers_user_path

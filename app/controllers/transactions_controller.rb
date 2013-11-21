@@ -9,11 +9,12 @@ class TransactionsController < ApplicationController
 
     def index
       @transactions = current_user.current_account.transactions.paginate(page: params[:page])
-      #flash[:success] = "#{current_user.current_account.name}"
+     #flash[:success] = "#{current_user.current_account.name}"
     end
 
 
   def createStandard
+    puts "\n\n\n\nCreateStandard\n\n\n"
     @transaction = Transaction.new(transaction_params)
     @transaction.account = current_user.current_account
 
@@ -29,35 +30,35 @@ class TransactionsController < ApplicationController
       flash[:success] = "Transaction #{@transaction.name} created!"
       redirect_to root_url
     else
-#      flash[:error] = "Transaction #{@transaction.name} could not be created!"
       render 'new'
     end
   end
 
   def create
-      @transaction = Transaction.new(transaction_params)
-      @transaction.account = current_user.current_account
-
-      category = Category.find(params[:category])
-      if category == nil
+    puts "\n\n\n\nCreate\n\n\n"
+    @transaction = Transaction.new(transaction_params)
+    @transaction.account = current_user.current_account
+    category = Category.find(params[:category])
+    if category == nil
         flash[:error] = "Category not set!"
         render 'new'
         return
-      end
-      @transaction.category = category
+    end
+    @transactions = current_user.current_account.transactions.paginate(page: params[:page])
 
-      if @transaction.save
-        flash[:success] = "Transaction #{@transaction.name} created!"
-      else
-  #      flash[:error] = "Transaction #{@transaction.name} could not be created!"
+    @transaction.category = category
+
+    if @transaction.save
+      flash[:success] = "Transaction #{@transaction.name} created!"
+    else
+        flash[:error] = "Transaction #{@transaction.name} could not be created!"
   #      render 'new'
-      end
-      respond_to do |format|
-       #    format.html { redirect_to transactions_path }
-       #    format.js 
-       
-          render :partial => "transaction_history", :object => @transactions
-      end
+    end
+    respond_to do |format|
+      format.html { redirect_to root_url }
+      format.js 
+       #     render :partial => "transaction_history", :object => @transactions
+    end
 
   end
 
@@ -96,11 +97,11 @@ class TransactionsController < ApplicationController
 
   def destroy
       transaction = Transaction.find(params[:id])
-
+      @transactions = current_user.current_account.transactions.paginate(page: params[:page])
       transaction.destroy
       flash[:success] = "Transaction deleted."
       respond_to do |format|
-        format.html { redirect_to root_url }
+        format.html { redirect_to transactions_path }
         format.js
       end
   end

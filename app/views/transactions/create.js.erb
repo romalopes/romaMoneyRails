@@ -1,4 +1,2 @@
-<%if 
-$("#transaction_history").hml("<%= escape_javascript(render(:partial =>'transaction_history')) %>")
-$("#transaction_history").hml("HTML")
+$("#history_of_transactions").html("<%= escape_javascript(render('transactions/transaction_history')) %>")
 $("#account_balance").html('<%= current_user.current_account.balance %>')

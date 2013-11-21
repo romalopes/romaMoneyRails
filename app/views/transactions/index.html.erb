@@ -5,15 +5,10 @@
   </aside>
   <div class="span8">
 	<h3>All Transactions</h3>
+	<%= render 'transactions/transaction_history' %>  
+  </div>	
+</div>	  
 
-	<%= will_paginate %>
 
-	<ul class="transactions">
-	  <% @transactions.each do |transaction| %>
-	    <%= render transaction %>  <!-- Call view/accounts/_transaction.html.erb  -->
-	  <% end %>
-	</ul>  
 
-	<%= will_paginate %>   </div>
-</div>	
 

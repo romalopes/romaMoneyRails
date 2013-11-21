@@ -1,10 +1,10 @@
 <% provide(:title, "Edit and Transaction") %>
-<h1>Update an Transaction</h1>
 <div class="row">
   <aside class="span4">
       <%= render 'shared/user_summary' %>  
   </aside>
   <div class="span6">
+  	<h3>Update an Transaction</h3>
     <%= form_for(@transaction) do |f| %>
       <%= render 'fields_transaction', f: f %>
 

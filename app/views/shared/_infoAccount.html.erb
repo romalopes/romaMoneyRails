@@ -15,11 +15,7 @@
 		  			<% end %>
 		          </ul>
 	    	</span>
-			<p id="account_balance" class="balance-<%=current_user.current_account.how_is_balance%>">
-				<b>Balance:</b> <strong id="account_balance">
-									$ <%= current_user.current_account.balance %>
-								</strong>
-			</p>
+	    	<%= render 'shared/balance' %>
 			 <p>
     		     Created <%= time_ago_in_words(current_user.current_account.created_at) %> ago.
     		 </p>
