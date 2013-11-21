@@ -1212,4 +1212,19 @@ Include jquery dialog - https://github.com/joliss/jquery-ui-rails
 	Also add the jQuery UI CSS to your application.css:
 		/*
 		 *= require jquery.ui.all
+		 *= require jquery.ui.all
+		 *= require jquery.ui.dialog
+ 		 *= require jquery.ui.core
 		 */		
+	In shared/_infoAccount.html.erb
+		<button onclick="return showDialogAddTransaction()" class="btn btn-small btn-primary" >Add Transaction Dialog</button>
+		And
+		<div id="addTransaction" style="display:none">
+			...
+		</div>
+
+	In application.js
+		function showDialogAddTransaction(){
+		    $("#addTransaction").dialog();
+    		return false;
+		}
