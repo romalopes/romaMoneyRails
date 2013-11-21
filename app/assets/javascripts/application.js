@@ -12,6 +12,8 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery.ui.all
+//= require jquery.ui.dialog
 //= require turbolinks
 //= require bootstrap
 //= require_tree .
@@ -20,4 +22,9 @@ $('document').ready(function() {
   $("#sendToTopPage").click(function(){
     $(window).scrollTop(0);
    });
+
 });
+function showDialogAddTransaction(){
+    $("#addTransaction").dialog();
+    return false;
+  }

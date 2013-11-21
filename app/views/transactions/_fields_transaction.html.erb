@@ -14,7 +14,7 @@
 <%end%>
 
 <%= f.label :date %>
-<%= f.date_field(:date, :placeholder=>"Date", :value => Date.parse(Time.now.to_s)) %>
+<%= f.datetime_local_field(:date, :placeholder=>"Date", :value => Date.parse(Time.now.to_s)) %>
 
 
 

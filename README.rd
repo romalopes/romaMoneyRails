@@ -1196,9 +1196,20 @@ Include Acconts
 		$ git merge include-category
 		$ git push
 		$ git push heroku
-		$ heroku pg:drop DATABASE
-		$ heroku pg:reset DATABASE
+		$ heroku pg:reset DATABASE --confirm romamoneyrails
+		$ heroku pg:reset DATABASE--confirm romamoneyrails
 		$ heroku run rake db:migrate
 		$ heroku run rake db:populate
 		$ heroku restart
 		$ heroku open
+Include jquery dialog - https://github.com/joliss/jquery-ui-rails
+	$ gem install jquery-ui-rails
+	in gemfile
+		gem "jquery-ui-rails", "~> 4.1.0"
+	To require all jQuery UI modules, add the following to your application.js:
+		//= require jquery.ui.all
+		//= require jquery.ui.dialog
+	Also add the jQuery UI CSS to your application.css:
+		/*
+		 *= require jquery.ui.all
+		 */		
