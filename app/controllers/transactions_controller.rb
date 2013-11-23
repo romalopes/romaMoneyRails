@@ -35,6 +35,9 @@ class TransactionsController < ApplicationController
   end
 
   def create
+
+    flash[:error] = nil
+    flash[:success] = nil
     puts "\n\n\n\nCreate\n\n\n"
     @transaction = Transaction.new(transaction_params)
     @transaction.account = current_user.current_account
@@ -45,13 +48,13 @@ class TransactionsController < ApplicationController
         return
     end
     @transactions = current_user.current_account.transactions.paginate(page: params[:page])
-
+    
     @transaction.category = category
 
     if @transaction.save
       flash[:success] = "Transaction #{@transaction.name} created!"
     else
-        flash[:error] = "Transaction #{@transaction.name} could not be created!"
+      flash[:error] = "Transaction #{@transaction.name} could not be created!"
   #      render 'new'
     end
     respond_to do |format|

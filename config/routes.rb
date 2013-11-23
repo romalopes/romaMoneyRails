@@ -32,7 +32,7 @@ RomaMoneyRails::Application.routes.draw do
     
   resources :users do
     member do
-      get :change_to_this, :change_account   #define following_user_path, followers_user_path
+      get :change_to_this, :change_account, :change_account_ajax   #define following_user_path, followers_user_path
     end
   end
 

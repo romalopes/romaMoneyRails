@@ -1,14 +1,14 @@
 <%# Rails flash messages styled for Twitter Bootstrap 2.3 %>
-
-<% flash.each do |name, msg| %>
-  <% if msg.is_a?(String) %>
-    <div class="alert-<%= name == :notice ? "success" : "error" %>">
-      <a class="close" data-dismiss="alert">&times;</a>
-      <%= content_tag :div, msg, :id => "flash_#{name}", class: "alert alert-#{name}"%>
-    </div>
-  <% end %>
-<% end %>
-
+<div id="messages">
+	<% flash.each do |name, msg| %>
+	  <% if msg.is_a?(String) %>
+	    <div class="alert-<%= name == :notice ? "success" : "error" %>">
+	      <a class="close" data-dismiss="alert">&times;</a>
+	      <%= content_tag :div, msg, :id => "flash_#{name}", class: "alert alert-#{name}"%>
+	    </div>
+	  <% end %>
+	<% end %>
+</div>
 <!-- 
 <%if false %>
 	<% flash.each do |name, msg| %>

@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 	before_action :signed_in_user,
-                only: [:index, :edit, :update, :destroy, :change_to_this]
+                only: [:index, :edit, :update, :destroy, :change_to_this, :change_account, :change_account_ajax]
   	before_action :correct_user,   only: [:edit, :update]
    	before_action :admin_user,     only: :destroy
 
@@ -18,14 +18,29 @@ class UsersController < ApplicationController
 		# @user = User.find(params[:id])
 		@account = Account.find(params[:id])
 
-		if current_user.update_attributes({:current_account_id => @account.id})
-			flash[:success] = "#{params}  #{@account} #{@account.id} #{current_user.current_account.name} "
-		else
-			flash[:error] = "#{params}  #{@account} #{@account.id} #{current_user.current_account.name} "
-		end
+		current_user.update_attribute(:current_account_id, @account.id)
 		
 		redirect_to root_url
 	end
+
+	def change_account_ajax
+	    flash[:error] = nil
+	    flash[:success] = nil
+	    
+	    @account = Account.find(params[:id])
+
+		current_user.update_attribute(:current_account_id, @account.id)
+
+    	@users = User.paginate(page: params[:page])
+		@transactions = current_user.current_account.transactions.paginate(page: params[:page])
+
+		respond_to do |format|
+	      format.html { redirect_to root_url }
+	      format.js 
+	       #     render :partial => "transaction_history", :object => @transactions
+	    end
+	end
+
 
 	def show
 		@user = User.find(params[:id])

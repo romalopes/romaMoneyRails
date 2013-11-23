@@ -1,0 +1,7 @@
+<div id="date_account">
+	 <p>
+	     Created <%= time_ago_in_words(current_user.current_account.created_at) %> ago.
+	 </p>
+	 <p>Created at <%= current_user.current_account.created_at.strftime("%d/%b/%Y") %>
+	 </p>
+</div>

@@ -6,5 +6,46 @@
     <p>Joined on Jun 08, 2013
   </section>
   
-  <%= render 'shared/infoAccount' %>
+<% if current_user.current_account.present? %>
+	<div class="row">
+		<div class="span4" style="background-color:lightgray;padding:5px; margin:10px">
+			<b>Current Account:</b>
+			<%= render 'shared/account_list' %>
+			<%= render 'shared/account_balance' %>
+	    	<%= render 'shared/date_account' %>
+   	    	<div class="center">
+		        <%= link_to  "Add Transaction new page", new_transaction_path, class: "btn btn-small btn-primary" %>
+	    	</div>
+		<div class="center" style="padding:5px;margin:5px">
+			<button onclick="return showDialogAddTransaction()" class="btn btn-small btn-primary" >Add Transaction Dialog</button>
+		</div>
+	</div>    	
+	<div class="center" style="padding:10px; margin-bottom:10px">
+        <%= link_to  "Manage Accounts", accounts_path, class: "btn btn-medium btn-primary" %>
+	</div>		
+	<div class="center">
+        <%= link_to  "New Account", createAccount_path, class: "btn btn-medium btn-primary" %>
+	</div>
+	<div >
+		<div class="span4" style="background-color:lightgray;padding:5px; margin:10px">
+		    <%= form_for(Transaction.new, remote:true) do |f| %>
+			    <%= render 'transactions/fields_transaction', f: f %>
+			    <center>
+      				<%= f.submit "Add Transaction", class: "btn btn-large btn-primary" %>
+      			</center>
+    		<% end %>
+		</div>
+	</div>    	
+	<div id="addTransaction" style="display:none">
+		<div class="span4" style="background-color:lightgray;padding:5px; margin:10px">
+		    <%= form_for(Transaction.new, remote:true) do |f| %>
+			    <%= render 'transactions/fields_transaction', f: f %>
+			    <center>
+      				<%= f.submit "Add Transaction", class: "btn btn-large btn-primary" %>
+      			</center>
+    		<% end %>
+		</div>
+	</div>    	
+<%end%>	
+
   

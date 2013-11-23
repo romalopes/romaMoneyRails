@@ -6,16 +6,28 @@ class Account < ActiveRecord::Base
   validates :name, presence: true, length: { minimum: 6, maximum: 50 }
   validates :balance, :numericality => true
   # before_create {self.balance = 0}
+  
+
+  def current_balance
+    value = 0.0
+    self.transactions.each {
+      |t| 
+      value += t.value  
+    }
+    return value
+  end
 
   def how_is_balance
-  	color = ""
-  	if self.balance > 0
-  		color = "blue"
-  	else
-  		if self.balance < 0
-  			color = "red"
-  		end
-  	end
-  	return color
-  end
+      color = ""
+      balance = current_balance
+      if balance > 0
+        color = "blue"
+      else
+        if balance < 0
+          color = "red"
+        end
+      end
+      return color
+    end
+
 end
