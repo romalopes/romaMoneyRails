@@ -8,7 +8,7 @@
   
 <% if current_user.current_account.present? %>
 	<div class="row">
-		<div class="span4" style="background-color:lightgray;padding:5px; margin:10px">
+		<div class="span4 grey-box" >
 			<b>Current Account:</b>
 			<%= render 'shared/account_list' %>
 			<%= render 'shared/account_balance' %>
@@ -19,25 +19,25 @@
 		<div class="center" style="padding:5px;margin:5px">
 			<button onclick="return showDialogAddTransaction()" class="btn btn-small btn-primary" >Add Transaction Dialog</button>
 		</div>
-	</div>    	
-	<div class="center" style="padding:10px; margin-bottom:10px">
-        <%= link_to  "Manage Accounts", accounts_path, class: "btn btn-medium btn-primary" %>
-	</div>		
-	<div class="center">
-        <%= link_to  "New Account", createAccount_path, class: "btn btn-medium btn-primary" %>
 	</div>
-	<div >
-		<div class="span4" style="background-color:lightgray;padding:5px; margin:10px">
-		    <%= form_for(Transaction.new, remote:true) do |f| %>
-			    <%= render 'transactions/fields_transaction', f: f %>
-			    <center>
-      				<%= f.submit "Add Transaction", class: "btn btn-large btn-primary" %>
-      			</center>
-    		<% end %>
+	<div class="span4 center grey-box">    	
+		<div style="margin-bottom:10px">
+	        <%= link_to  "Manage Accounts", accounts_path, class: "btn btn-medium btn-primary" %>
+		</div>		
+		<div >
+	        <%= link_to  "New Account", createAccount_path, class: "btn btn-medium btn-primary" %>
 		</div>
-	</div>    	
+	</div>
+	<div class="span4 grey-box " >
+	    <%= form_for(Transaction.new, remote:true) do |f| %>
+		    <%= render 'transactions/fields_transaction', f: f %>
+		    <center>
+   				<%= f.submit "Add Transaction", class: "btn btn-large btn-primary" %>
+   			</center>
+   		<% end %>
+	</div>
 	<div id="addTransaction" style="display:none">
-		<div class="span4" style="background-color:lightgray;padding:5px; margin:10px">
+		<div class="span4 transaction-box">
 		    <%= form_for(Transaction.new, remote:true) do |f| %>
 			    <%= render 'transactions/fields_transaction', f: f %>
 			    <center>

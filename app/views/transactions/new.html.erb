@@ -1,7 +1,7 @@
 <% provide(:title, 'Create Transaction') %>
 <h1>Create a new Transaction</h1>
 
-<div class="row">
+<div class="row transaction-box">
   <div class="span6 offset3">
     <%= form_for(@transaction, controller: 'transactions', action:'createStandard') do |f| %>
 

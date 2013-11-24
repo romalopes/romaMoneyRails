@@ -4,21 +4,24 @@
 	    <section>
 	    </section>
 	</aside>
-	<div class="span8 center" style="background-color:lightgray; padding-bottom:20px">
+	<div class="span8 center">
 		<h3>Transactions Statistics</h3>
-		<p>
+
 <% if false %>
 			<%= high_chart("my_id", @h) %>
 			<%= high_chart("my_id1", @chart1) %>
 <% end %>			
+		<div class="transaction-box">
 			<%= high_chart("my_id_income", @chart_income) do |c| %>
 	          <%= raw "options.tooltip.formatter = function() {return '<b>'+ this.point.name +'</b>: '+ this.y +' %';}"  %>
 	          <%= raw "options.plotOptions.pie.dataLabels.formatter = function() { if (this.y > 5) return this.point.name + ': '+this.y +'%'; }"  %>
       		<% end %>
+      	</div>
+      	<div class="transaction-box">
       		<%= high_chart("my_id_expense", @chart_expense) do |c| %>
 	          <%= raw "options.tooltip.formatter = function() {return '<b>'+ this.point.name +'</b>: '+ this.y +' %';}"  %>
 	          <%= raw "options.plotOptions.pie.dataLabels.formatter = function() { if (this.y > 5) return this.point.name + ': '+this.y +'%'; }"  %>
       		<% end %>
-		</p>
+		</div>
   	</div>
  </div>

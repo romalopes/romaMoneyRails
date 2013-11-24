@@ -9,7 +9,6 @@ class TransactionsController < ApplicationController
 
   def index
     @transactions = current_user.current_account.transactions.paginate(page: params[:page])
-   #flash[:success] = "#{current_user.current_account.name}"
   end
 
   def stats
@@ -57,7 +56,6 @@ class TransactionsController < ApplicationController
     data_expense << [k, percentage]
   end
 
-  flash[:tes] = "#{data_expense}  #{data_income}"
   @chart_income = LazyHighCharts::HighChart.new('pie') do |f|
       f.chart({:defaultSeriesType=>"pie" , :margin=> [50, 0, 0, 0]} )
       series = {

@@ -25,7 +25,6 @@ class AccountsController < ApplicationController
       	current_user.update_attributes(:current_account_id => @account.id)
       end
     else
-#      flash[:error] = "Account #{@account.name} could not be created!"
       render 'new'
     end
   end

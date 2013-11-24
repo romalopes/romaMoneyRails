@@ -3,7 +3,7 @@
   <aside class="span4">
       <%= render 'shared/user_summary' %>  
   </aside>
-  <div class="span6">
+  <div class="span6 transaction-box">
   	<h3>Update an Transaction</h3>
     <%= form_for(@transaction) do |f| %>
       <%= render 'fields_transaction', f: f %>

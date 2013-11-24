@@ -1,6 +1,6 @@
 /*include the entire Bootstrap CSS framework.*/
 @import "bootstrap"; 
-@import 'fuelux.less';
+//@import 'fuelux.less';
 
 /* mixins, variables, etc. */
 
@@ -297,4 +297,22 @@ input {
       border-bottom: 1px solid $grayLighter;
     }
   }
+}
+ 
+.transaction-box {
+  border:2px solid;
+  border-radius:15px;
+  border-color: #6699CC;
+  padding:5px 10px 10px 10px;
+  background-color: transparent;
+  margin-bottom: 10px;
+}
+
+.grey-box {
+  border:1px solid;
+  border-radius:15px;
+  border-color: #6699CC;
+  padding:5px 5px 5px 5px;
+  background-color: #EEEEFF;
+  margin-bottom: 10px;
 }

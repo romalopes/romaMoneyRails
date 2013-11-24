@@ -1,4 +1,4 @@
-<li>
+<div class="transaction-box">
 	<%=transaction.name%>
 	<p><%=transaction.description%>
 
@@ -14,4 +14,4 @@
     | <%= link_to "delete", transaction, method: :delete, remote: true,
                                   data: { confirm: "You sure?" } %>
 
-</li>
+</div>

@@ -20,7 +20,6 @@
 //= require highcharts/highcharts                                                           
 //= require highcharts/highcharts-more                                                         
 //= require highcharts/highstock
-//= require fuelux.js
 
 
 $('document').ready(function() {

@@ -1,11 +1,11 @@
  <div id="history_of_transactions" >
 	<%= will_paginate %>
 
-	<ul class="transactions">
+	<div class="transactions">
 	  <% @transactions.each do |transaction| %>
 	    <%= render transaction %>  <!-- Call view/accounts/_transaction.html.erb  -->
 	  <% end %>
-	</ul>  
+	</div>  
 
 	<%= will_paginate %>   </div>
 </div>	

@@ -1,8 +1,10 @@
 <% provide(:title, 'Create Account') %>
 <h1>Create a new Account</h1>
-
 <div class="row">
-  <div class="span6 offset3">
+  <aside class="span4">
+      
+  </aside>
+  <div class="span6 offset3 transaction-box">
     <%= form_for(@account) do |f| %>
 
       <%= render 'fields_account', f: f %>

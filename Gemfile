@@ -19,7 +19,7 @@ gem 'faker', '1.1.2'
 gem 'will_paginate', '3.0.4'
 gem 'bootstrap-will_paginate', '0.0.9'
 gem 'lazy_high_charts'
-gem 'fuelux-rails' #, :git => 'git://github.com/stephenbaldwin/fuelux-rails.git'
+#gem 'fuelux-rails' #, :git => 'git://github.com/stephenbaldwin/fuelux-rails.git'
 
 #gem "twitter-bootstrap-rails"
 group :development do
