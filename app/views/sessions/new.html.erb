@@ -1,7 +1,12 @@
 <% provide(:title, "Sign in") %>
-<h1>Sign in</h1>
 <div class="row">
-  <div class="span4 offset4">
+  <aside class="span4">
+      <section>
+      </section>
+  </aside>
+  <div class="span8 offset4 transaction-box" style="border-radius:15px; padding-bottom:20px; margin-bottom:70px">
+
+    <h1>Sign in</h1>
     <%= form_for(:session, url: sessions_path) do |f| %>
 
       <%= f.label :email %>
@@ -9,7 +14,7 @@
 
       <%= f.label :password %>
       <%= f.password_field :password %>
-
+<p>
       <%= f.submit "Sign in", class: "btn btn-large btn-primary" %>
     <% end %>
 
