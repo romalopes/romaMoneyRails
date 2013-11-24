@@ -8,7 +8,9 @@ class TransactionsController < ApplicationController
   end
 
   def index
-    @transactions = current_user.current_account.transactions.paginate(page: params[:page])
+    if current_user != nil && current_user.current_account != nil
+      @transactions = current_user.current_account.transactions.paginate(page: params[:page])
+    end
   end
 
   def stats

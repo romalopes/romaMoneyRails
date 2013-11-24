@@ -4,9 +4,39 @@
       <%= render 'shared/user_summary' %>  
   </aside>
   <div class="span8">
+  	<% if current_user.current_account.present? || current_user.accounts_size > 0 %>
+  		<% if @transactions.present? && @transactions.size > 0%>
+			<h3>All Transactions</h3>
+			<%= render 'transactions/transaction_history' %>  
+		<% else %>
+			<div class="span8 center grey-box" style="padding:10px">    	
+				<div style="margin-bottom:10px">
+			        <%= link_to  "Manage Accounts", accounts_path, class: "btn btn-medium btn-primary" %>
+				</div>		
+				<div >
+			        <%= link_to  "New Account", createAccount_path, class: "btn btn-medium btn-primary" %>
+				</div>
+			</div>
+			<% if current_user.current_account.present? %>
+				<div class="span8 center"><h3> You don't have any transaction</h3></div>
+				<div class="span6 offset1 center grey-box">
+				    <%= form_for(Transaction.new, controller: 'transactions', action:'createStandard') do |f| %>
 
-	<h3>All Transactions</h3>
-	<%= render 'transactions/transaction_history' %>  
+				      <%= render 'fields_transaction', f: f %>
+				      <%= f.submit "Create a new transaction", class: "btn btn-large btn-primary" %>
+				    <% end %>
+				</div>
+			<% end %>
+
+		<% end %>
+	<% else %>
+		<div class="span8 center grey-box" style="padding:10px">    	
+			<div >
+		        <%= link_to  "New Account", createAccount_path, class: "btn btn-medium btn-primary" %>
+			</div>
+		</div>
+	<% end %>
+
   </div>	
 </div>	  
 

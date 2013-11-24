@@ -2,12 +2,16 @@
 	<%=account.name%>
 	<p><%=account.description%>
 	<p class="value-<%=account.how_is_balance%>">
-		<b>Balance:</b> $ <%= account.balance %>
+		<b>Balance:</b> $ <%= account.current_balance %>
 	</p>
 	<%= link_to "Change", edit_account_path(account) %>
     | <%= link_to "delete", account, method: :delete,
                                   data: { confirm: "You sure?" } %>
-	| <%= link_to "change to this", change_account_user_path(account) %>
+    <% if current_user.current_account == account %>
+    	<span style="color:orange">| this is the current account</span>
+    <%else%>
+		| <%= link_to "change to this account", change_account_user_path(account) %>
+	<%end%>
     		
 </li>
 

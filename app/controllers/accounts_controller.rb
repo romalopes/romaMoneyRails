@@ -22,7 +22,7 @@ class AccountsController < ApplicationController
       flash[:success] = "Account #{@account.name} created!"
       redirect_to root_url
       if current_user.current_account == nil
-      	current_user.update_attributes(:current_account_id => @account.id)
+        current_user.update_attribute(:current_account_id, @account.id)
       end
     else
       render 'new'
@@ -59,7 +59,7 @@ class AccountsController < ApplicationController
 
   private 
   	    def account_params
-	      params.require(:account).permit(:name, :description, :balance)
+	      params.require(:account).permit(:name, :description)
 		end
 
 end
