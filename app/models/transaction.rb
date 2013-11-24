@@ -7,19 +7,31 @@ class Transaction < ActiveRecord::Base
   validates :date, presence: true
   validates :name, presence: true, length: { minimum: 6, maximum: 50 }
   validates :value, :numericality => true
+  validate :greater_than_or_equal_to_zero
 
   default_scope -> { order('date DESC') }
 
+  def is_income
+      category = Category.find(self.category_id)
+      return category.group_category_id == 1 
+  end
+
   def how_is_value
+    if self.value == 0
+      return ""
+    end
   	color = ""
-  	if self.value > 0
+  	if is_income
   		color = "blue"
   	else
-  		if self.value < 0
-  			color = "red"
-  		end
+ 			color = "red"
   	end
   	return color
   end
 
+  def greater_than_or_equal_to_zero
+    if value < 0
+      errors.add(:value, "can't should be greater or equal to 0")
+    end
+  end
 end

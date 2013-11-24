@@ -7,12 +7,15 @@ class Account < ActiveRecord::Base
   validates :balance, :numericality => true
   # before_create {self.balance = 0}
   
-
   def current_balance
     value = 0.0
     self.transactions.each {
       |t| 
-      value += t.value  
+      if t.is_income == true
+        value += t.value  
+      else
+        value -= t.value  
+      end
     }
     return value
   end

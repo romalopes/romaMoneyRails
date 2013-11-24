@@ -25,10 +25,16 @@ RomaMoneyRails::Application.routes.draw do
   match '/createAccount',  to: 'accounts#new',            via: 'get'
   match '/createTransaction',  to: 'transactions#new',            via: 'get'
 
+  match '/stats',  to: 'transactions#stats',            via: 'get'
+
 
   resources :accounts
 
-  resources :transactions
+  resources :transactions do
+    member do
+      get :stats
+    end
+  end
     
   resources :users do
     member do

@@ -12,4 +12,5 @@ class HomeController < ApplicationController
       redirect_to transactions_path
     end
   end
+
 end

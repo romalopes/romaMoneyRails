@@ -1228,3 +1228,10 @@ Include jquery dialog - https://github.com/joliss/jquery-ui-rails
 		    $("#addTransaction").dialog();
     		return false;
 		}
+
+Include statistics
+	https://github.com/michelson/lazy_high_charts/wiki
+
+
+Including the tree to types of category
+	https://github.com/stephenbaldwin/fuelux-rails

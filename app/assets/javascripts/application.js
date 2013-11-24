@@ -17,11 +17,40 @@
 //= require turbolinks
 //= require bootstrap
 //= require_tree .
+//= require highcharts/highcharts                                                           
+//= require highcharts/highcharts-more                                                         
+//= require highcharts/highstock
+//= require fuelux.js
+
 
 $('document').ready(function() {
+
   $("#sendToTopPage").click(function(){
     $(window).scrollTop(0);
    });
+
+  $('#treeCategories').tree({ dataSource: dataSource })
+  /*
+  var dataSource = new StaticDataSource({
+            columns: [
+                {
+                    property: 'username',
+                    label: 'Name',
+                    sortable: true
+                },
+                {
+                    property: 'username',
+                    label: 'Country',
+                    sortable: true
+                },
+            data: this.collection,
+            delay: 250
+        });
+        $('#MyGrid').datagrid({
+            dataSource: dataSource,
+            stretchHeight: true
+        });*/
+
 
 });
 function showDialogAddTransaction(){

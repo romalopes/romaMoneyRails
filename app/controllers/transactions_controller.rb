@@ -7,14 +7,108 @@ class TransactionsController < ApplicationController
     @transaction = Transaction.new
   end
 
-    def index
-      @transactions = current_user.current_account.transactions.paginate(page: params[:page])
-     #flash[:success] = "#{current_user.current_account.name}"
+  def index
+    @transactions = current_user.current_account.transactions.paginate(page: params[:page])
+   #flash[:success] = "#{current_user.current_account.name}"
+  end
+
+  def stats
+    flash[:error] = nil
+    flash[:success] = nil
+
+  @transactions = Transaction.where("account_id = ?", current_user.current_account)
+
+
+  income_data = Hash.new(0)
+  expense_data = Hash.new(0)
+
+  sum_income = 0
+  sum_expense = 0
+
+   @transactions.each do |t| 
+      name = t.category.name
+      if t.category.group_category_id == 1
+        if(income_data.has_key?(name))
+          value = income_data[name] + t.value.to_i
+          income_data [name] =value.to_i
+        else
+          income_data [name] = t.value.to_i
+        end
+        sum_income += t.value
+      else
+        if(expense_data.has_key?(name))
+          value = expense_data[name] + t.value.to_i
+          expense_data [name] = value.to_i
+        else
+          expense_data [name] = t.value.to_i
+        end
+        sum_expense += t.value
+      end
+   end
+  data_income = []
+  income_data.keys.each do |k|
+    percentage = (100*income_data[k]/sum_income).to_i
+    data_income << [k, percentage]
+  end
+
+  data_expense = []
+  expense_data.keys.each do |k|
+    percentage = (100*expense_data[k]/sum_expense).to_i
+    data_expense << [k, percentage]
+  end
+
+  flash[:tes] = "#{data_expense}  #{data_income}"
+  @chart_income = LazyHighCharts::HighChart.new('pie') do |f|
+      f.chart({:defaultSeriesType=>"pie" , :margin=> [50, 0, 0, 0]} )
+      series = {
+               :type=> 'pie',
+               :name=> 'Browser share',
+               :data=> data_income
+      }
+      f.series(series)
+      f.options[:title][:text] = "Incomes"
+      f.legend(:layout=> 'vertical',:style=> {:left=> 'auto', :bottom=> 'auto',:right=> '50px',:top=> '100px'}) 
+      f.plot_options(:pie=>{
+        :allowPointSelect=>true, 
+        :cursor=>"pointer" , 
+        :dataLabels=>{
+          :enabled=>true,
+          :color=>"black",
+          :style=>{
+            :font=>"13px Trebuchet MS, Verdana, sans-serif"
+          }
+        }
+      })
     end
+    @chart_expense = LazyHighCharts::HighChart.new('pie') do |f|
+      f.chart({:defaultSeriesType=>"pie" , :margin=> [50, 0, 0, 0]} )
+      series = {
+               :type=> 'pie',
+               :name=> 'Browser share',
+               :data=> data_expense
+      }
+      f.series(series)
+      f.options[:title][:text] = "Expenses"
+      f.legend(:layout=> 'vertical',:style=> {:left=> 'auto', :bottom=> 'auto',:right=> '50px',:top=> '100px'}) 
+      f.plot_options(:pie=>{
+        :allowPointSelect=>true, 
+        :cursor=>"pointer" , 
+        :dataLabels=>{
+          :enabled=>true,
+          :color=>"black",
+          :style=>{
+            :font=>"13px Trebuchet MS, Verdana, sans-serif"
+          }
+        }
+      })
+    end
+
+########################    
+    render 'stats'
+  end
 
 
   def createStandard
-    puts "\n\n\n\nCreateStandard\n\n\n"
     @transaction = Transaction.new(transaction_params)
     @transaction.account = current_user.current_account
 
@@ -35,10 +129,8 @@ class TransactionsController < ApplicationController
   end
 
   def create
-
     flash[:error] = nil
     flash[:success] = nil
-    puts "\n\n\n\nCreate\n\n\n"
     @transaction = Transaction.new(transaction_params)
     @transaction.account = current_user.current_account
     category = Category.find(params[:category])
@@ -47,16 +139,15 @@ class TransactionsController < ApplicationController
         render 'new'
         return
     end
-    @transactions = current_user.current_account.transactions.paginate(page: params[:page])
-    
+
     @transaction.category = category
 
     if @transaction.save
       flash[:success] = "Transaction #{@transaction.name} created!"
     else
       flash[:error] = "Transaction #{@transaction.name} could not be created!"
-  #      render 'new'
     end
+    @transactions = current_user.current_account.transactions.paginate(page: params[:page])
     respond_to do |format|
       format.html { redirect_to root_url }
       format.js 
@@ -110,10 +201,8 @@ class TransactionsController < ApplicationController
   end
 
   private
-      private 
-        def transaction_params
-          params.require(:transaction).permit(:name, :description, 
+    def transaction_params
+      params.require(:transaction).permit(:name, :description, 
                                               :value, :date)
     end
-
 end
