@@ -149,12 +149,21 @@ class TransactionsController < ApplicationController
     @transaction = Transaction.new(transaction_params)
     @transaction.account = current_user.current_account
 
-    category = Category.find(params[:category])
-    if category == nil
-      flash[:error] = "Category not set!"
+
+    categoryGroup_radio = params[:categoryGroup_radio]
+    category = 0
+    if categoryGroup_radio == ''
+      flash[:error] = "Please, select a group of category."
       render 'new'
       return
     end
+    if categoryGroup_radio == "income"
+      category = params[:category_income]
+    else categoryGroup_radio == "expense"
+      category = params[:category_expense]
+    end
+  
+    category = Category.find(category)
     @transaction.category = category
 
     if @transaction.save
@@ -174,20 +183,24 @@ class TransactionsController < ApplicationController
 
     categoryGroup_radio = params[:categoryGroup_radio]
     category = 0
-    if categoryGroup_radio == "income"
-      category = params[:category_income]
+    if categoryGroup_radio == ''
+      flash[:error] = "Please, select a group of category."
     else
-      category = params[:category_expense]
-    end
+      if categoryGroup_radio == "income"
+        category = params[:category_income]
+      else categoryGroup_radio == "expense"
+        category = params[:category_expense]
+      end
 
-    category = Category.find(category)
+      category = Category.find(category)
 
-    @transaction.category = category
+      @transaction.category = category
 
-    if @transaction.save
-      flash[:success] = "Transaction #{@transaction.name} created!"
-    else
-      flash[:error] = "Transaction #{@transaction.name} could not be created!"
+      if @transaction.save
+        flash[:success] = "Transaction #{@transaction.name} created!"
+      else
+        flash[:error] = "Transaction #{@transaction.name} could not be created!"
+      end
     end
     @transactions = current_user.current_account.transactions.paginate(page: params[:page])
     respond_to do |format|
@@ -214,6 +227,12 @@ class TransactionsController < ApplicationController
 
     categoryGroup_radio = params[:categoryGroup_radio]
     category = 0
+    if categoryGroup_radio == ''
+      flash[:error] = "Please, select a group of category."
+      render 'edit'
+      return
+    end
+
     if categoryGroup_radio == "income"
       category = params[:category_income]
     else

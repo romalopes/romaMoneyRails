@@ -636,6 +636,11 @@ Sign in, sign out
 		$ git push
 		$ git push heroku
 		$ heroku run rake db:migrate
+		$ heroku run rake db:migrate
+		$ heroku run rake db:populate
+		$ heroku restart
+		$ heroku open
+
 Updating, showing, and deleting users
 	$ git checkout -b updating-users
 	Updating
