@@ -7,21 +7,30 @@
 	<div class="span8 center">
 		<h3>Transactions Statistics</h3>
 
-<% if false %>
-			<%= high_chart("my_id", @h) %>
-			<%= high_chart("my_id1", @chart1) %>
-<% end %>			
 		<div class="transaction-box">
 			<%= high_chart("my_id_income", @chart_income) do |c| %>
+	          <%= raw "options.tooltip.formatter = function() {return '<b>'+ this.point.name +'</b>: '+ this.y;}"  %>
+	          <%= raw "options.plotOptions.pie.dataLabels.formatter = function() { if (this.y > 5) return this.point.name + ': AU$'+this.y; }"  %>
+      		<% end %>
+      	</div>
+      			<div class="transaction-box">
+			<%= high_chart("my_id_income_percentage", @chart_income_percentage) do |c| %>
 	          <%= raw "options.tooltip.formatter = function() {return '<b>'+ this.point.name +'</b>: '+ this.y +' %';}"  %>
 	          <%= raw "options.plotOptions.pie.dataLabels.formatter = function() { if (this.y > 5) return this.point.name + ': '+this.y +'%'; }"  %>
       		<% end %>
       	</div>
       	<div class="transaction-box">
       		<%= high_chart("my_id_expense", @chart_expense) do |c| %>
+	          <%= raw "options.tooltip.formatter = function() {return '<b>'+ this.point.name +'</b>: '+ this.y;}"  %>
+	          <%= raw "options.plotOptions.pie.dataLabels.formatter = function() { if (this.y > 5) return this.point.name + ': AU$'+this.y; }"  %>
+      		<% end %>
+		</div>
+      	<div class="transaction-box">
+      		<%= high_chart("my_id_expense_percentage", @chart_expense_percentage) do |c| %>
 	          <%= raw "options.tooltip.formatter = function() {return '<b>'+ this.point.name +'</b>: '+ this.y +' %';}"  %>
 	          <%= raw "options.plotOptions.pie.dataLabels.formatter = function() { if (this.y > 5) return this.point.name + ': '+this.y +'%'; }"  %>
       		<% end %>
 		</div>
+
   	</div>
  </div>

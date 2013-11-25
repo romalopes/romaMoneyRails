@@ -5,6 +5,7 @@ class TransactionsController < ApplicationController
 
   def new
     @transaction = Transaction.new
+    @transaction.date = Time.now;
   end
 
   def index
@@ -13,60 +14,76 @@ class TransactionsController < ApplicationController
     end
   end
 
+
   def stats
     flash[:error] = nil
     flash[:success] = nil
 
-  @transactions = Transaction.where("account_id = ?", current_user.current_account)
+    @transactions = Transaction.where("account_id = ?", current_user.current_account)
 
+    @result = Transaction.select("category_id, sum(value) as sum_value").group("category_id")
 
-  income_data = Hash.new(0)
-  expense_data = Hash.new(0)
+    data_income = []
+    data_income_percentage = []
+    data_expense = []
+    data_expense_percentage = []
 
-  sum_income = 0
-  sum_expense = 0
+    sum_expense = 0
+    sum_income = 0
 
-   @transactions.each do |t| 
-      name = t.category.name
-      if t.category.group_category_id == 1
-        if(income_data.has_key?(name))
-          value = income_data[name] + t.value.to_i
-          income_data [name] =value.to_i
-        else
-          income_data [name] = t.value.to_i
-        end
-        sum_income += t.value
+    @result.each do |r|
+      cat = Category.find(r.category_id)
+      if(cat.group_category_id == 1)
+        sum_income += r.sum_value;
       else
-        if(expense_data.has_key?(name))
-          value = expense_data[name] + t.value.to_i
-          expense_data [name] = value.to_i
-        else
-          expense_data [name] = t.value.to_i
-        end
-        sum_expense += t.value
+        sum_expense += r.sum_value;
       end
-   end
-  data_income = []
-  income_data.keys.each do |k|
-    percentage = (100*income_data[k]/sum_income).to_i
-    data_income << [k, percentage]
-  end
+    end
 
-  data_expense = []
-  expense_data.keys.each do |k|
-    percentage = (100*expense_data[k]/sum_expense).to_i
-    data_expense << [k, percentage]
-  end
+    @result.each do |r|
+      cat = Category.find(r.category_id)
+      if(cat.group_category_id == 1)
+        percentage = (100*r.sum_value/sum_income).to_i
+        data_income_percentage << [cat.name, percentage]
+        data_income <<  [cat.name, r.sum_value]
+      else
+        percentage = (100*r.sum_value/sum_expense).to_i
+        data_expense_percentage << [cat.name, percentage]
+        data_expense <<  [cat.name, r.sum_value]
+      end
+    end
 
-  @chart_income = LazyHighCharts::HighChart.new('pie') do |f|
+    @chart_income = LazyHighCharts::HighChart.new('pie') do |f|
+        f.chart({:defaultSeriesType=>"pie" , :margin=> [50, 0, 0, 0]} )
+        series = {
+                 :type=> 'pie',
+                 :name=> 'Incomes',
+                 :data=> data_income
+        }
+        f.series(series)
+        f.options[:title][:text] = "Incomes"
+        f.legend(:layout=> 'vertical',:style=> {:left=> 'auto', :bottom=> 'auto',:right=> '50px',:top=> '100px'}) 
+        f.plot_options(:pie=>{
+          :allowPointSelect=>true, 
+          :cursor=>"pointer" , 
+          :dataLabels=>{
+            :enabled=>true,
+            :color=>"black",
+            :style=>{
+              :font=>"13px Trebuchet MS, Verdana, sans-serif"
+            }
+          }
+        })
+    end
+    @chart_income_percentage = LazyHighCharts::HighChart.new('pie') do |f|
       f.chart({:defaultSeriesType=>"pie" , :margin=> [50, 0, 0, 0]} )
       series = {
                :type=> 'pie',
-               :name=> 'Browser share',
-               :data=> data_income
+               :name=> 'Incomes Percentage',
+               :data=> data_income_percentage
       }
       f.series(series)
-      f.options[:title][:text] = "Incomes"
+      f.options[:title][:text] = "Incomes Percentage"
       f.legend(:layout=> 'vertical',:style=> {:left=> 'auto', :bottom=> 'auto',:right=> '50px',:top=> '100px'}) 
       f.plot_options(:pie=>{
         :allowPointSelect=>true, 
@@ -84,7 +101,7 @@ class TransactionsController < ApplicationController
       f.chart({:defaultSeriesType=>"pie" , :margin=> [50, 0, 0, 0]} )
       series = {
                :type=> 'pie',
-               :name=> 'Browser share',
+               :name=> 'Expenses',
                :data=> data_expense
       }
       f.series(series)
@@ -102,8 +119,28 @@ class TransactionsController < ApplicationController
         }
       })
     end
-
-########################    
+    @chart_expense_percentage = LazyHighCharts::HighChart.new('pie') do |f|
+      f.chart({:defaultSeriesType=>"pie" , :margin=> [50, 0, 0, 0]} )
+      series = {
+               :type=> 'pie',
+               :name=> 'Expenses percentage',
+               :data=> data_expense_percentage
+      }
+      f.series(series)
+      f.options[:title][:text] = "Expenses percentage"
+      f.legend(:layout=> 'vertical',:style=> {:left=> 'auto', :bottom=> 'auto',:right=> '50px',:top=> '100px'}) 
+      f.plot_options(:pie=>{
+        :allowPointSelect=>true, 
+        :cursor=>"pointer" , 
+        :dataLabels=>{
+          :enabled=>true,
+          :color=>"black",
+          :style=>{
+            :font=>"13px Trebuchet MS, Verdana, sans-serif"
+          }
+        }
+      })
+    end
     render 'stats'
   end
 
@@ -132,13 +169,18 @@ class TransactionsController < ApplicationController
     flash[:error] = nil
     flash[:success] = nil
     @transaction = Transaction.new(transaction_params)
+
     @transaction.account = current_user.current_account
-    category = Category.find(params[:category])
-    if category == nil
-        flash[:error] = "Category not set!"
-        render 'new'
-        return
+
+    categoryGroup_radio = params[:categoryGroup_radio]
+    category = 0
+    if categoryGroup_radio == "income"
+      category = params[:category_income]
+    else
+      category = params[:category_expense]
     end
+
+    category = Category.find(category)
 
     @transaction.category = category
 
@@ -159,22 +201,46 @@ class TransactionsController < ApplicationController
 
   def edit
     @transaction = Transaction.find(params[:id])
+    
+    if @transaction.category.group_category_id == 1
+      @current_category_income = @transaction.category.id
+    else
+      @current_category_expense = @transaction.category.id
+    end
   end
 
   def update
     @transaction = Transaction.find(params[:id])
-    
-    category = Category.find(params[:category])
-    if category == nil
-      flash[:error] = "Category not set! #{params}\n\n =======transaction= #{transaction_params}  \n\n--------#{params[:category]}-----"
-      render 'new'
-      return
-    end
-    transaction_params = { "category" => category }
-    if @transaction.update_attributes(transaction_params)
 
+    categoryGroup_radio = params[:categoryGroup_radio]
+    category = 0
+    if categoryGroup_radio == "income"
+      category = params[:category_income]
+    else
+      category = params[:category_expense]
+    end
+
+    category = Category.find(category)
+    if category == nil
+        flash[:error] = "Category not set!"
+        render 'edit'
+        return
+    end
+    @transaction.category = category
+
+    if(@transaction.invalid?)
+      @transaction.errors.full_messages.each do |e|
+        flash[e] = e
+      end
+      render 'edit'
+      return
+
+    end
+
+    
+    if @transaction.update_attributes(transaction_params)
       # Handle a successful update.
-      flash[:success] = "Transaction updated  #{transaction_params}"
+      flash[:success] = "Transaction updated."
       redirect_to root_url
     else
       render 'edit'

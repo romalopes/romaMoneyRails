@@ -6,15 +6,43 @@
 
 <%= f.text_field :value, :placeholder=>"Value"%>
 
-<%= f.label :category %>
-<%= select_tag("category", options_from_collection_for_select(Category.all, :id, :name, :prompt => true)) %>
-<%if false %>
+<div >
+	Groups Category:
+	<input id="categoryGroup_radio_income" type="radio" name="categoryGroup_radio" onchange="handleChange(this);" value="income">Income
+	<input id="categoryGroup_radio_expense" type="radio" name="categoryGroup_radio" onchange="handleChange(this);" value="expense">Expense
+	<p>
+</div>
 
-<%=f.select :category, Category.all.collect {|c| [c.name, c.id]} %>
-<%end%>
+<div id="select_income" class="class_select_income" style="display:none">
+	Income
+	<%= select_tag(:category_income, options_from_collection_for_select(categories_by_group(1), :id, :name, :prompt => true, :selected => @current_category_income)) %>
+</div>
+<div id="select_expense" class="class_select_expense" style="display:none">
+	Expense
+	<%= select_tag(:category_expense, options_from_collection_for_select(categories_by_group(2), :id, :name, :prompt => true, :selected => @current_category_expense)) %>
+</div>
+
+
 
 <%= f.label :date %>
-<%= f.date_field(:date, :placeholder=>"Date", :value => Date.parse(Time.now.to_s)) %>
+<%= f.date_field(:date, :placeholder=>"Date") %>
 
+<script type="text/javascript">
+
+	//window.onload = select_radio_group_category;
+
+	function handleChange(myRadio) {
+	    if(myRadio.value == 'income') {
+			$('.class_select_income').css('display', 'block');
+	    	$('.class_select_expense').css('display', 'none');
+
+	    }
+	    else {
+	    	$('.class_select_income').css('display', 'none');
+	    	$('.class_select_expense').css('display', 'block');
+	    }
+	}
+
+</script>
 
 

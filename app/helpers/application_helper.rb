@@ -9,4 +9,8 @@ module ApplicationHelper
       "#{base_title} | #{page_title}"
     end
   end
+
+  def categories_by_group(group_category_id)
+  	Category.where("group_category_id = ?", group_category_id)
+  end
 end

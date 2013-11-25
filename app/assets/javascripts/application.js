@@ -52,7 +52,12 @@ $('document').ready(function() {
 
 
 });
+
+
 function showDialogAddTransaction(){
     $("#addTransaction").dialog();
     return false;
 }
+
+
+
