@@ -4,7 +4,6 @@ class Account < ActiveRecord::Base
   
   validates :user_id, presence: true
   validates :name, presence: true, length: { minimum: 6, maximum: 50 }
-  validates :balance, :numericality => true
   # before_create {self.balance = 0}
   
   def current_balance

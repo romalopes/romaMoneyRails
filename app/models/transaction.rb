@@ -11,6 +11,13 @@ class Transaction < ActiveRecord::Base
 
   default_scope -> { order('date DESC') }
 
+  after_initialize do 
+   self[:date] = Time.now
+  # def initialize()
+  #   @date = Time.new
+  end
+
+
   def is_income
       category = Category.find(self.category_id)
       return category.group_category_id == 1 

@@ -8,16 +8,32 @@
 
 <div >
 	Groups Category:
-	<input id="categoryGroup_radio_income" type="radio" name="categoryGroup_radio" onchange="handleChange(this);" value="income">Income
-	<input id="categoryGroup_radio_expense" type="radio" name="categoryGroup_radio" onchange="handleChange(this);" value="expense">Expense
+	<input id="categoryGroup_radio_income" type="radio" name="categoryGroup_radio" onchange="handleChange(this);" value="income"
+	<% if @current_category_income.present? %>
+		checked
+	<% end %>
+	>Income
+	<input id="categoryGroup_radio_expense" type="radio" name="categoryGroup_radio" onchange="handleChange(this);" value="expense"
+	<% if @current_category_expense.present? %>
+		checked
+	<% end %>
+	>Expense
 	<p>
 </div>
 
-<div id="select_income" class="class_select_income" style="display:none">
+<div id="select_income" class="class_select_income"
+	<% if !@current_category_income.present? %>
+		style="display:none"
+	<% end %>
+ >
 	Income
 	<%= select_tag(:category_income, options_from_collection_for_select(categories_by_group(1), :id, :name, :prompt => true, :selected => @current_category_income)) %>
 </div>
-<div id="select_expense" class="class_select_expense" style="display:none">
+<div id="select_expense" class="class_select_expense" 
+	<% if !@current_category_expense.present? %>
+		style="display:none"
+	<% end %>
+>
 	Expense
 	<%= select_tag(:category_expense, options_from_collection_for_select(categories_by_group(2), :id, :name, :prompt => true, :selected => @current_category_expense)) %>
 </div>
