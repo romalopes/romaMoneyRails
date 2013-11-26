@@ -61,3 +61,14 @@ function showDialogAddTransaction(){
 
 
 
+    function handleChange(myRadio) {
+        if(myRadio.value == 'income') {
+            $('.class_select_income').css('display', 'block');
+            $('.class_select_expense').css('display', 'none');
+
+        }
+        else {
+            $('.class_select_income').css('display', 'none');
+            $('.class_select_expense').css('display', 'block');
+        }
+    }

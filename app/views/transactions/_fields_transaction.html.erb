@@ -41,20 +41,5 @@
 <%= f.label :date %>
 <%= f.date_field(:date, :placeholder=>"Date") %>
 
-<script type="text/javascript">
-
-	function handleChange(myRadio) {
-	    if(myRadio.value == 'income') {
-			$('.class_select_income').css('display', 'block');
-	    	$('.class_select_expense').css('display', 'none');
-
-	    }
-	    else {
-	    	$('.class_select_income').css('display', 'none');
-	    	$('.class_select_expense').css('display', 'block');
-	    }
-	}
-
-</script>
 
 
