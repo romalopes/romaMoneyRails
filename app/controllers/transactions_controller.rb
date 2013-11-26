@@ -21,7 +21,7 @@ class TransactionsController < ApplicationController
 
     @transactions = Transaction.where("account_id = ?", current_user.current_account)
 
-    @result = Transaction.select("category_id, sum(value) as sum_value").group("category_id")
+    @result = Transaction.select("date, category_id, sum(value) as sum_value").group("category_id")
 
     data_income = []
     data_income_percentage = []
