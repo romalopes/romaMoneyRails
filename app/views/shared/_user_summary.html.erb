@@ -29,7 +29,7 @@
 		</div>
 	</div>
 	<div class="span4 grey-box " >
-	    <%= form_for(Transaction.new, remote:true) do |f| %>
+	    <%= form_for(new_transaction, remote:true) do |f| %>
 		    <%= render 'transactions/fields_transaction', f: f %>
 		    <center>
    				<%= f.submit "Add Transaction", class: "btn btn-large btn-primary" %>
@@ -38,7 +38,7 @@
 	</div>
 	<div id="addTransaction" style="display:none">
 		<div class="span4 transaction-box">
-		    <%= form_for(Transaction.new, remote:true) do |f| %>
+		    <%= form_for(new_transaction, remote:true) do |f| %>
 			    <%= render 'transactions/fields_transaction', f: f %>
 			    <center>
       				<%= f.submit "Add Transaction", class: "btn btn-large btn-primary" %>

@@ -1,11 +1,11 @@
 class TransactionsController < ApplicationController
   before_action :signed_in_user
 
+  include ApplicationHelper
   respond_to :html, :js
 
   def new
-    @transaction = Transaction.new
-    @transaction.date = Time.now;
+    @transaction = new_transaction
   end
 
   def index
@@ -149,10 +149,9 @@ class TransactionsController < ApplicationController
     @transaction = Transaction.new(transaction_params)
     @transaction.account = current_user.current_account
 
-
     categoryGroup_radio = params[:categoryGroup_radio]
     category = 0
-    if categoryGroup_radio == ''
+    if categoryGroup_radio == nil
       flash[:error] = "Please, select a group of category."
       render 'new'
       return
@@ -168,6 +167,7 @@ class TransactionsController < ApplicationController
 
     if @transaction.save
       flash[:success] = "Transaction #{@transaction.name} created!"
+      flash[:success] = "params=#{params}"
       redirect_to root_url
     else
       render 'new'
@@ -178,12 +178,11 @@ class TransactionsController < ApplicationController
     flash[:error] = nil
     flash[:success] = nil
     @transaction = Transaction.new(transaction_params)
-
     @transaction.account = current_user.current_account
 
     categoryGroup_radio = params[:categoryGroup_radio]
     category = 0
-    if categoryGroup_radio == ''
+    if categoryGroup_radio == nil
       flash[:error] = "Please, select a group of category."
     else
       if categoryGroup_radio == "income"
@@ -227,7 +226,7 @@ class TransactionsController < ApplicationController
 
     categoryGroup_radio = params[:categoryGroup_radio]
     category = 0
-    if categoryGroup_radio == ''
+    if categoryGroup_radio == nil
       flash[:error] = "Please, select a group of category."
       render 'edit'
       return
@@ -276,13 +275,18 @@ class TransactionsController < ApplicationController
 
   def destroy
       transaction = Transaction.find(params[:id])
-      @transactions = current_user.current_account.transactions.paginate(page: params[:page])
       transaction.destroy
-      flash[:success] = "Transaction deleted."
-      respond_to do |format|
-        format.html { redirect_to transactions_path }
-        format.js
-      end
+      @transactions = current_user.current_account.transactions.paginate(page: params[:page])
+
+      # if @transactions.empty?
+      #   redirect_to root_url
+      # else
+        flash[:success] = "Transaction deleted."
+        respond_to do |format|
+          format.html { redirect_to root_url }
+          format.js
+        end
+      # end
   end
 
   private

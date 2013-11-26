@@ -45,5 +45,22 @@ FactoryGirl.define do
     balance 0.0
     user
   end
-
+  factory :group_category do
+    name "Group 1"
+    image "image"
+    group_type "group_type"
+  end
+  factory :category do
+    name "Category"
+    image "image"
+    description "Description"
+    group_category
+  end
+  factory :transaction do
+    name "Transaction"
+    description "Description"
+    value 100.0
+    account
+    category
+  end
 end

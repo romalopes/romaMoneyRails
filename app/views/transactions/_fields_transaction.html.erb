@@ -7,7 +7,7 @@
 <%= f.text_field :value, :placeholder=>"Value"%>
 
 <div >
-	Groups Category:
+	Group:
 	<input id="categoryGroup_radio_income" type="radio" name="categoryGroup_radio" onchange="handleChange(this);" value="income"
 	<% if @current_category_income.present? %>
 		checked
@@ -38,14 +38,10 @@
 	<%= select_tag(:category_expense, options_from_collection_for_select(categories_by_group(2), :id, :name, :prompt => true, :selected => @current_category_expense)) %>
 </div>
 
-
-
 <%= f.label :date %>
 <%= f.date_field(:date, :placeholder=>"Date") %>
 
 <script type="text/javascript">
-
-	//window.onload = select_radio_group_category;
 
 	function handleChange(myRadio) {
 	    if(myRadio.value == 'income') {

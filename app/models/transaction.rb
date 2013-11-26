@@ -3,20 +3,13 @@ class Transaction < ActiveRecord::Base
   belongs_to :account
 
   validates :account, presence: true
-  #validates :category, presence: true
+  validates :category, presence: true
   validates :date, presence: true
   validates :name, presence: true, length: { minimum: 6, maximum: 50 }
   validates :value, :numericality => true
   validate :greater_than_or_equal_to_zero
 
   default_scope -> { order('date DESC') }
-
-  after_initialize do 
-   self[:date] = Time.now
-  # def initialize()
-  #   @date = Time.new
-  end
-
 
   def is_income
       category = Category.find(self.category_id)

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Account do
 	let(:user) { FactoryGirl.create(:user) }
-	before { @account = user.account.build(name: "Account1", description: "First Account", balance:1000) }
+	before { @account = user.accounts.build(name: "Account1", description: "First Account", balance:1000) }
 
   	subject { @account }
 
@@ -36,7 +36,7 @@ describe Account do
 	end
 	
 	describe "with name that is too long" do
-		before { @account.long = "a" * 51 }
+		before { @account.name = "a" * 51 }
 		it { should_not be_valid }
 	end
 end

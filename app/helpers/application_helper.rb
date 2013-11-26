@@ -13,4 +13,12 @@ module ApplicationHelper
   def categories_by_group(group_category_id)
   	Category.where("group_category_id = ?", group_category_id)
   end
+
+  def new_transaction()
+    @transaction = Transaction.new
+    @transaction.date = Time.now;
+
+    return @transaction
+  end
+
 end
