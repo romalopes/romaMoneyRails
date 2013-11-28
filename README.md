@@ -3,11 +3,10 @@ romaMoneyRails
 
 Money Management developed by Anderson Lopes(romalopes) using <strong>Ruby on Rails</strong>
 
-To see all the steps goes to https://github.com/romalopes/romaMoneyRails/blob/master/README.rd
-
 Versions in different technologies
 == 
-Instructions and steps in: README.rd
+
+Instructions and steps in: [README.rd](https://github.com/romalopes/romaMoneyRails/blob/master/README.rd)
 
 This is part of a project of develop this system using different technologies
 
