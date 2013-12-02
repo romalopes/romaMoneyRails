@@ -13,7 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery.ui.all
-//= require jquery.ui.dialog
 //= require turbolinks
 //= require bootstrap
 //= require_tree .
@@ -21,12 +20,32 @@
 //= require highcharts/highcharts-more                                                         
 //= require highcharts/highstock
 
+//= require jquery.ui.core
+//= require jquery.ui.widget
+//= require jquery.ui.mouse
+//= require jquery.ui.position
+
+
+//= require jquery.ui.accordion
+//= require jquery.ui.autocomplete
+//= require jquery.ui.button
+//= require jquery.ui.datepicker
+//= require jquery.ui.dialog
+//= require jquery.ui.menu
+//= require jquery.ui.progressbar
+//= require jquery.ui.slider
+//= require jquery.ui.spinner
+//= require jquery.ui.tabs
+//= require jquery.ui.tooltip
+
+
 
 $('document').ready(function() {
 
   $("#sendToTopPage").click(function(){
     $(window).scrollTop(0);
    });
+
 
 });
 
@@ -53,5 +72,6 @@ function handleChange(myRadio) {
         $('.class_select_income').css('display', 'none');
         $('.class_select_expense').css('display', 'block');
     }
-
 }
+
+ 

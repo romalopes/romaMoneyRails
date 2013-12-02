@@ -8,11 +8,15 @@
 <%end%>    
      <title><%= full_title_page(yield(:title)) %></title>
 
-  
      <meta name="description" content="<%= content_for?(:description) ? yield(:description) : "Roma Money Rails" %>">
     <%= stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true %>
     <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
     <%= csrf_meta_tags %>
+<!-- 
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+ -->
     <%= render 'layouts/shim' %>  <!-- Call the part with IE9-->
   </head>
   <body>

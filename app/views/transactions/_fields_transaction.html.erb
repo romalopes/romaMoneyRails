@@ -39,7 +39,14 @@
 </div>
 
 <%= f.label :date %>
-<%= f.date_field(:date) %>
+<%= f.date_field(:date, :width=>30) %>
+
+<script>
+  $(function() {
+    $( "#datepicker" ).datepicker( "option", "dateFormat", "yyyy-mm-dd" );
+    $( "#datepicker" ).datepicker();
+  });
+  </script>
 
 
 

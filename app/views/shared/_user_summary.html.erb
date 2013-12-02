@@ -40,7 +40,7 @@
 	   		<% end %>
 		</div>
 	<% end %>
-	<div id="addTransaction" style="display:none">
+	<div id="addTransaction" title="Add a transaction" style="display:none">
 		<div class="span4 transaction-box">
 		    <%= form_for(new_transaction, remote:true) do |f| %>
 			    <%= render 'transactions/fields_transaction', f: f %>

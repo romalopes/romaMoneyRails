@@ -1287,4 +1287,7 @@ Make Accounts have many User
 				$ heroku run rake db:migrate
 			$ heroku open
 
+Invite User to account using email
+	git checkout -b invite-users-using-email
+
 
