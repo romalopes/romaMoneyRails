@@ -1274,4 +1274,17 @@ Make Accounts have many User
 		$ bundle exec rake db:migrate
 		$ bundle exec rake test:prepare
 
+	7. 	Commiting
+		    $ git add .
+			$ git commit -m "include-users"
+			$ git checkout master
+			$ git merge sign-up
+		
+	    More Commiting and Heroku
+	    	$ git commit -a -m "Add SSL in production"
+			$ git push heroku master
+			- Migrate the DB to heroku
+				$ heroku run rake db:migrate
+			$ heroku open
+
 
