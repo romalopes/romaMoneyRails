@@ -114,13 +114,13 @@ describe "Account pages" do
       describe "should show account Content" do
         it { should have_content('All Accounts') }
         it { should have_content('AccountA') }
-        it { should have_link('delete', href: account_path(Account.first)) }
+        it { should have_link('unassociate', href: account_path(Account.first)) }
       end
 
       describe "and invited user remove another account" do
         it "should be able to remove another account" do
           expect do
-            click_link('delete', match: :first)
+            click_link('unassociate', match: :first)
           end.to change(UserAccount, :count).by(-1)
         end 
       end

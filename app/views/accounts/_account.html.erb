@@ -4,12 +4,21 @@
 	<p class="value-<%=account.how_is_balance%>">
 		<b>Balance:</b> $ <%= account.current_balance %>
 	</p>
+	<% if !account.user_manager?(current_user) %>
+		<b>Owner:</b> <%= account.user_name %>
+	<% else %>
+		<b>You are the owner</b>
+    <% end %>
+	<p></p>
 	<% if account.user_manager?(current_user) %>
 		<%= link_to "Change", edit_account_path(account) %>
-
-    | 
-    <% end %><%= link_to "delete", account, method: :delete,
+    	| <%= link_to "delete", account, method: :delete,
                                   data: { confirm: "You sure?" } %>
+    <% else %>
+    	<%= link_to "unassociate", account, method: :delete,
+                                  data: { confirm: "You sure?" } %>
+    <% end %>
+
     <% if current_user.current_account == account %>
     	<span style="color:orange">| this is the current account</span>
     <%else%>

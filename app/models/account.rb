@@ -41,4 +41,11 @@ class Account < ActiveRecord::Base
     end
     return false
   end
+
+  def user_name
+    if user_id == nil
+      return ''
+    end
+    return User.find(user_id).name
+  end
 end
