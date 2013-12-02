@@ -20,7 +20,7 @@
 			<% if current_user.current_account.present? %>
 				<div class="span8 center"><h3> You don't have any transaction</h3></div>
 				<div class="span6 offset1 center grey-box">
-				    <%= form_for(Transaction.new, controller: 'transactions', action:'createStandard') do |f| %>
+				    <%= form_for(new_transaction, controller: 'transactions', action:'createStandard') do |f| %>
 
 				      <%= render 'fields_transaction', f: f %>
 				      <%= f.submit "Create a new transaction", class: "btn btn-large btn-primary" %>
