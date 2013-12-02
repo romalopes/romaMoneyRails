@@ -104,7 +104,7 @@ def make_transactions
                       value: 7500,
                       date: Date.parse(Time.now.to_s),
                       category:salary_category,
-                      account:gmailAccount1)
+                      account:gmail2Account)
 
   Transaction.create!(name:"Transport",
                       value: 120,
