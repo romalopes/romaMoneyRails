@@ -8,7 +8,7 @@
 # end
 
 
-FactoryGirl.define do
+FactoryGirl.define do 
   factory :user do
     sequence(:name)  { |n| "Person #{n}" }
     sequence(:email) { |n| "person_#{n}@example.com"}
@@ -20,20 +20,20 @@ FactoryGirl.define do
     end
   end
   factory :account do
-    name "Account1"
+    name "AccountA"
     description "First Account"
     balance 1.0
     user
   end
   #user.current_account_id = account.id
 
-  factory :account1 do
+  factory :accountA1 do
   	name "AccountA1"
   	description "First Account"
   	balance 50.0
   	user
   end
-  factory :account2 do
+  factory :accountA2 do
     name "AccountA2"
     description "Second Account"
     balance -40.0

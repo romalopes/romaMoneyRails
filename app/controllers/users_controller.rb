@@ -16,8 +16,12 @@ class UsersController < ApplicationController
 
 	def change_account
 		# @user = User.find(params[:id])
-		@account = Account.find(params[:id])
+		@account = Account.find_by(id: params[:id])
+		if @account == nil
+			flash[:error] = "Account already deleted"
+			redirect_to root_url and return
 
+		end	
 		current_user.update_attribute(:current_account_id, @account.id)
 		
 		redirect_to root_url
@@ -27,13 +31,16 @@ class UsersController < ApplicationController
 	    flash[:error] = nil
 	    flash[:success] = nil
 	    
-	    @account = Account.find(params[:id])
+	    @account = Account.find_by(id: params[:id])
+	    @users = User.paginate(page: params[:page])
 
-		current_user.update_attribute(:current_account_id, @account.id)
-
-    	@users = User.paginate(page: params[:page])
-		@transactions = current_user.current_account.transactions.paginate(page: params[:page])
-
+	    if @account == nil
+			flash[:error] = "Account already deleted"
+		else
+			current_user.update_attribute(:current_account_id, @account.id)
+			@transactions = current_user.current_account.transactions.paginate(page: params[:page])			
+		end
+	    
 		respond_to do |format|
 	      format.html { redirect_to root_url }
 	      format.js 

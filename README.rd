@@ -29,6 +29,9 @@ Puting in Git
 
 	$ git push -u origin master
 
+To run test
+	bundle exec guard
+	bundle exec rspec spec/
 Include icons and links to twitter and facebook
 	- http://noizwaves.github.io/bootstrap-social-buttons/
 	- http://fortawesome.github.io/Font-Awesome/
@@ -1238,5 +1241,37 @@ Include statistics
 	https://github.com/michelson/lazy_high_charts/wiki
 
 
-Including the tree to types of category
-	https://github.com/stephenbaldwin/fuelux-rails
+Make Accounts have many User
+	git checkout -b accounts-many-users
+
+	1. Create  has_many through: Association
+	in User.rb
+		has_many :accounts, through: :userAccount, source: :account
+
+	2. Create has_many through: Association
+	in Account.rb
+		has_many :users, through: :userAccount, source: :user
+
+	3. Generate Relationship model
+		$ rails generate model userAccount user_id:integer account_id:integer
+ 		
+ 		invoke  active_record
+	      create    db/migrate/20131130023819_create_user_accounts.rb
+	      create    app/models/user_account.rb
+	      invoke    rspec
+	      create      spec/models/user_account_spec.rb
+	      invoke      factory_girl
+	      create        spec/factories/user_accounts.rb
+
+	      3.1. Change the Account.rb, User.rb and UserAccount.rb
+	      	To accept the validation and destroy.
+	4. Implement the htmls part
+
+	5. Implement the controller
+
+	6. Migrate and test
+		$ bundle exec rake db:reset
+		$ bundle exec rake db:migrate
+		$ bundle exec rake test:prepare
+
+

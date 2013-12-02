@@ -9,16 +9,18 @@
 <% if current_user.current_account.present? %>
 	<div class="row">
 		<div class="span4 grey-box" >
-			<b>Current Account:</b>
-			<%= render 'shared/account_list' %>
+			<b>Current Account:</b><%= render 'shared/account_list' %>
+			<b>Shares with:</b><%= render 'shared/user_account_list' %>
 			<%= render 'shared/account_balance' %>
 	    	<%= render 'shared/date_account' %>
    	    	<div class="center">
 		        <%= link_to  "Add Transaction new page", new_transaction_path, class: "btn btn-small btn-primary" %>
 	    	</div>
-		<div class="center" style="padding:5px;margin:5px">
-			<button onclick="return showDialogAddTransaction()" class="btn btn-small btn-primary" >Add Transaction Dialog</button>
-		</div>
+	    <% if !current_user.current_account.transactions.empty? %>
+			<div class="center" style="padding:5px;margin:5px">
+				<button onclick="return showDialogAddTransaction()" class="btn btn-small btn-primary" >Add Transaction Dialog</button>
+			</div>
+		<% end %>
 	</div>
 	<div class="span4 center grey-box">    	
 		<div style="margin-bottom:10px">
@@ -28,14 +30,16 @@
 	        <%= link_to  "New Account", createAccount_path, class: "btn btn-medium btn-primary" %>
 		</div>
 	</div>
-	<div class="span4 grey-box " >
-	    <%= form_for(new_transaction, remote:true) do |f| %>
-		    <%= render 'transactions/fields_transaction', f: f %>
-		    <center>
-   				<%= f.submit "Add Transaction", class: "btn btn-large btn-primary" %>
-   			</center>
-   		<% end %>
-	</div>
+	<% if !current_user.current_account.transactions.empty? %>
+		<div class="span4 grey-box " >
+		    <%= form_for(new_transaction, remote:true) do |f| %>
+			    <%= render 'transactions/fields_transaction', f: f %>
+			    <center>
+	   				<%= f.submit "Add Transaction", class: "btn btn-large btn-primary" %>
+	   			</center>
+	   		<% end %>
+		</div>
+	<% end %>
 	<div id="addTransaction" style="display:none">
 		<div class="span4 transaction-box">
 		    <%= form_for(new_transaction, remote:true) do |f| %>

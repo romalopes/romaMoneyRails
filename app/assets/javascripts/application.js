@@ -28,47 +28,30 @@ $('document').ready(function() {
     $(window).scrollTop(0);
    });
 
-  $('#treeCategories').tree({ dataSource: dataSource })
-  /*
-  var dataSource = new StaticDataSource({
-            columns: [
-                {
-                    property: 'username',
-                    label: 'Name',
-                    sortable: true
-                },
-                {
-                    property: 'username',
-                    label: 'Country',
-                    sortable: true
-                },
-            data: this.collection,
-            delay: 250
-        });
-        $('#MyGrid').datagrid({
-            dataSource: dataSource,
-            stretchHeight: true
-        });*/
-
-
 });
 
 
 function showDialogAddTransaction(){
     $("#addTransaction").dialog();
     return false;
-}
+};
+
+function showInviteUserToAccount(id){
+    $("#inviteUserToAccount"+id).dialog();
+    return false;
+};
 
 
 
-    function handleChange(myRadio) {
-        if(myRadio.value == 'income') {
-            $('.class_select_income').css('display', 'block');
-            $('.class_select_expense').css('display', 'none');
+function handleChange(myRadio) {
+    if(myRadio.value == 'income') {
+        $('.class_select_income').css('display', 'block');
+        $('.class_select_expense').css('display', 'none');
 
-        }
-        else {
-            $('.class_select_income').css('display', 'none');
-            $('.class_select_expense').css('display', 'block');
-        }
     }
+    else {
+        $('.class_select_income').css('display', 'none');
+        $('.class_select_expense').css('display', 'block');
+    }
+
+}

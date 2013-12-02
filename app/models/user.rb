@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
-	has_many :accounts, dependent: :destroy
+	#has_many :accounts, dependent: :destroy 
+	has_many :user_accounts, dependent: :destroy
+	has_many :accounts, through: :user_accounts, dependent: :destroy
 
 	before_save { self.email = email.downcase }
 	before_create :create_remember_token
@@ -30,8 +32,18 @@ class User < ActiveRecord::Base
   	end
 
   	def accounts_size
-  		Account.where(user_id:self.id).count
+  		UserAccount.where(user_id:self.id).count
   	end
+
+  	def set_first_account_possible
+        if self.accounts_size > 0
+          self.update_attribute("current_account_id", self.accounts.first.id)
+        else
+          self.update_attribute("current_account_id", nil)
+        end
+    end
+      
+
   	private
 
 	    def create_remember_token

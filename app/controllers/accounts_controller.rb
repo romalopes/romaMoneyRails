@@ -18,14 +18,25 @@ class AccountsController < ApplicationController
       return
     end
 
-    if @account.save
-      flash[:success] = "Account #{@account.name} created!"
-      redirect_to root_url
-      if current_user.current_account == nil
-        current_user.update_attribute(:current_account_id, @account.id)
+#DOUBT 
+    Account.transaction do
+      if @account.save
+        flash[:success] = "Account #{@account.name} created!"
+        redirect_to root_url
+        if current_user.current_account == nil
+          current_user.update_attribute(:current_account_id, @account.id)
+        end
+
+        user_account = UserAccount.new(user_id:current_user.id, account_id: @account.id)
+
+        if !user_account.save
+          flash[:error] = "User_Account not created."
+          render 'new'
+          return
+        end
+      else
+        render 'new'
       end
-    else
-      render 'new'
     end
   end
 
@@ -34,7 +45,13 @@ class AccountsController < ApplicationController
     end
 
   def update
-      @account = Account.find(params[:id])
+      @account = Account.find_by(id: params[:id])
+      if @account == nil
+        flash[:error] = "Account deleted by other user"
+        redirect_to accounts_path
+        return
+      end
+
       if @account.update_attributes(account_params)
         # Handle a successful update.
         flash[:success] = "Account updated"
@@ -45,21 +62,86 @@ class AccountsController < ApplicationController
   end
 
   def destroy
-      account = Account.find(params[:id])
-      account_id = account.id
-      account.destroy
+      account = Account.find_by(id: params[:id])
 
-#      if current_user.current_account_id == account_id
-        current_user.save_current_account_Id(Account.first.id)
- #     end
-     
+      if account == nil
+        flash[:error] = "Account deleted by other user"
+        redirect_to accounts_path
+        return
+      end
+
+      account_id = account.id
+
+      #if he is the manager try search for all users that have this account
+      #try to chante the current_account_id
+      #destroy the account
+      if account.user_manager?(current_user)
+        account.destroy
+        users = User.where("current_account_id = ?", account_id)
+        users.each do |user|
+            if user.current_account_id == account_id
+              user.set_first_account_possible
+            end
+        end
+      else
+      #else only destroy the relationship
+        #flash["user_account"] = "user_id: #{user_account.user_id}   account_id: #{user_account.account_id}"
+        userAccount = UserAccount.find_by(user_id: current_user.id, account_id: account_id)
+        userAccount.destroy
+      end
+      if current_user.current_account_id == account_id
+        current_user.set_first_account_possible
+      end
+
+      #only destroy if 
+      #countUserAccount = UserAccount.where("account_id = ?", account_id, false).count
+      #if(countUserAccount == 1)
+      #  account.destroy
+      #end
+      if current_user.current_account_id == nil
+        redirect_to root_url
+        return
+      end
       flash[:success] = "Account deleted."
+      redirect_to accounts_path
+  end
+
+  def invite_user_to_account
+      user_id = params[:user_id]
+      email = params[:email]
+      account_id = params[:account_id]
+
+      invited_user = User.find_by(email: email)
+      if invited_user.nil?
+          flash[:error] = "user #{email} not found"
+      else
+        if invited_user.id == user_id
+          flash[:error] = "You are invinting yourself"
+        else
+          user_account = UserAccount.find_by(user_id: invited_user.id, account_id: account_id)
+          if user_account.nil?
+            user_account = UserAccount.new(user_id: invited_user.id, account_id: account_id)
+            if user_account.save
+
+              flash[:success] = "User invited"
+              if invited_user.current_account_id == nil
+                invited_user.update_attribute("current_account_id", account_id)
+              end
+            else
+              flash[:error] = "Problem inviting user #{email}"
+            end
+          else
+              flash[:error] = "Relationship already exists"
+          end
+        end
+      end
+
       redirect_to accounts_path
   end
 
   private 
   	    def account_params
-	      params.require(:account).permit(:name, :description)
+	      params.require(:account).permit(:name, :user_id, :description)
 		end
 
 end

@@ -1,0 +1,12 @@
+<span id="user_account_list" class="dropdown center">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <%= current_user.name %> <b class="caret"></b>
+    </a>
+	<ul class="dropdown-menu">
+		<% current_user.current_account.users.each do |user| %>
+			<% if user.id != current_user.id %>
+				<li><%= user.name %> </li>
+			<%end%>
+		<% end %>
+	 </ul>
+</span>

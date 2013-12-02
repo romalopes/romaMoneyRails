@@ -7,7 +7,8 @@ describe "Static pages" do
 	shared_examples_for "all static pages" do
 	  	#header
 		it { should have_link("Roma Money Rails", href: root_path) }
-	#			it { should have_image('img', text: "home.png") }
+#		it { should have_image('img', text: "/assets/home.png") }
+
 		#footer
 	  	it { should have_link("Github", href: "http://github.com/romalopes/romaMoneyRails") }
 		it { should have_link("Facebook", href: "http://facebook.com/romalopes") }

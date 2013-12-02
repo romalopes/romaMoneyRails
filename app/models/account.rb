@@ -1,5 +1,8 @@
 class Account < ActiveRecord::Base
   belongs_to :user
+  has_many :user_accounts, dependent: :destroy
+  has_many :users, through: :user_accounts
+
   has_many :transactions, dependent: :destroy
   
   validates :user_id, presence: true
@@ -20,16 +23,22 @@ class Account < ActiveRecord::Base
   end
 
   def how_is_balance
-      color = ""
-      balance = current_balance
-      if balance > 0
-        color = "blue"
-      else
-        if balance < 0
-          color = "red"
-        end
+    color = ""
+    balance = current_balance
+    if balance > 0
+      color = "blue"
+    else
+      if balance < 0
+        color = "red"
       end
-      return color
     end
+    return color
+  end
 
+  def user_manager?(user)
+    if user.id == user_id
+      return true
+    end
+    return false
+  end
 end

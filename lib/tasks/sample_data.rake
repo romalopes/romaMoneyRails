@@ -2,10 +2,10 @@ namespace :db do
   desc "Fill database with sample data"
   task populate: :environment do
     make_users
-    make_accounts
+#    make_accounts
     make_group_categories
     make_categories
-    make_transactions
+ #   make_transactions
   end
 end
 
@@ -14,8 +14,13 @@ def make_users
                  email: "romalopes@yahoo.com.br",
                  password: "foobar",
                  password_confirmation: "foobar",
-                 admin: true,
-                 current_account_id: 1)
+                 admin: true)
+
+    User.create!(name: "Cida",
+                 email: "cydynha@msn.com",
+                 password: "foobar",
+                 password_confirmation: "foobar",
+                 admin: true)
 
     # User.create!(name: "Example User",
     #              email: "example@railstutorial.org",

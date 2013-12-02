@@ -99,13 +99,16 @@ describe User do
 		let!(:account2) do
 	      FactoryGirl.create(:account, user: @user)
 	    end
-	 	it "should destroy associated account" do
+
+
+
+	    describe "destroy user" do
+#			before { @user.destroy }
+
+		 	it "should destroy associated accounts" do
 		      accounts = @user.accounts.to_a
-		      @user.destroy
-		      expect(accounts).not_to be_empty
-		      accounts.each do |account|
-		        expect(Account.where(id: account.id)).to be_empty
-		      end
+		      expect(accounts).to be_empty
+		    end
 	    end
 	end	
 end

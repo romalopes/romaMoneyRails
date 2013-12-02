@@ -27,8 +27,15 @@ RomaMoneyRails::Application.routes.draw do
 
   match '/stats',  to: 'transactions#stats',            via: 'get'
 
+  match '/invite_user_to_account',  to: 'accounts#invite_user_to_account',            via: 'post'
 
-  resources :accounts
+
+  resources :accounts do
+    member do
+        post :invite_user_to_account
+    end
+  end
+
 
   resources :transactions do
     member do

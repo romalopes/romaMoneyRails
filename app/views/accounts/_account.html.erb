@@ -4,14 +4,34 @@
 	<p class="value-<%=account.how_is_balance%>">
 		<b>Balance:</b> $ <%= account.current_balance %>
 	</p>
-	<%= link_to "Change", edit_account_path(account) %>
-    | <%= link_to "delete", account, method: :delete,
+	<% if account.user_manager?(current_user) %>
+		<%= link_to "Change", edit_account_path(account) %>
+
+    | 
+    <% end %><%= link_to "delete", account, method: :delete,
                                   data: { confirm: "You sure?" } %>
     <% if current_user.current_account == account %>
     	<span style="color:orange">| this is the current account</span>
     <%else%>
 		| <%= link_to "change to this account", change_account_user_path(account) %>
 	<%end%>
-    		
+	<% if account.user_manager?(current_user) %>
+<!-- 		<a hred="#" onclick="return showInviteUserToAccount()">Share this account</a>
+ -->	| <button onclick="return showInviteUserToAccount(<%=account.id%>)" class="btn btn-small btn-primary">Share this account</button>
+	
+		<div id="inviteUserToAccount<%=account.id%>" style="display:none">
+			<div class="span4 transaction-box">
+				<%= form_tag(controller:"accounts", action:"invite_user_to_account", method:"post") do %>
+					<%= label_tag(:email, "email:") %>
+  					<%= text_field_tag(:email) %>
+  					<%= hidden_field_tag(:user_id, current_user.id) %>
+   					<%= hidden_field_tag(:account_id, account.id) %>
+  					<center>
+			    		<%= submit_tag "Add Transaction", class: "btn btn-large btn-primary" %>
+	      			</center>
+	    		<% end %>
+			</div>
+		</div>    	
+	<%end%>
 </li>
 
