@@ -5,7 +5,7 @@ class Transaction < ActiveRecord::Base
   validates :account, presence: true
   validates :category, presence: true
   validates :date, presence: true
-  validates :name, presence: true, length: { minimum: 6, maximum: 50 }
+  validates :name, presence: true, length: { minimum: 3, maximum: 50 }
   validates :value, :numericality => true
   validate :greater_than_or_equal_to_zero
 
