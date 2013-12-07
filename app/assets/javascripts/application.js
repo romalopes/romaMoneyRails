@@ -11,32 +11,15 @@
 // about supported directives.
 //
 //= require jquery
-//= require jquery_ujs
-//= require jquery.ui.all
 //= require turbolinks
-//= require bootstrap
 //= require_tree .
+//= require bootstrap
 //= require highcharts/highcharts                                                           
 //= require highcharts/highcharts-more                                                         
 //= require highcharts/highstock
-
-//= require jquery.ui.core
-//= require jquery.ui.widget
-//= require jquery.ui.mouse
-//= require jquery.ui.position
-
-
-//= require jquery.ui.accordion
-//= require jquery.ui.autocomplete
-//= require jquery.ui.button
+//= require jquery_ujs
+//= require jquery.ui.all
 //= require jquery.ui.datepicker
-//= require jquery.ui.dialog
-//= require jquery.ui.menu
-//= require jquery.ui.progressbar
-//= require jquery.ui.slider
-//= require jquery.ui.spinner
-//= require jquery.ui.tabs
-//= require jquery.ui.tooltip
 
 
 

@@ -31,6 +31,7 @@
 		</div>
 	</div>
 	<% if !current_user.current_account.transactions.empty? %>
+	<% if false%>
 		<div class="span4 grey-box " >
 		    <%= form_for(new_transaction, remote:true) do |f| %>
 			    <%= render 'transactions/fields_transaction', f: f %>
@@ -39,6 +40,7 @@
 	   			</center>
 	   		<% end %>
 		</div>
+	<%end%>
 	<% end %>
 	<div id="addTransaction" title="Add a transaction" style="display:none">
 		<div class="span4 transaction-box">
@@ -49,7 +51,7 @@
       			</center>
     		<% end %>
 		</div>
-	</div>    	
+	</div>    
 <%end%>	
 
   

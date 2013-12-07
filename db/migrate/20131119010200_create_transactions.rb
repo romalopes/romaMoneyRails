@@ -6,7 +6,7 @@ class CreateTransactions < ActiveRecord::Migration
       t.references :account, index: true
       t.decimal :value
       t.string :description
-      t.datetime :date
+      t.date :date
 
       t.timestamps
     end
