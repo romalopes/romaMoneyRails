@@ -1341,6 +1341,7 @@ Sending email welcoming a new user
 	    enable_starttls_auto: true  }
 	  end
 	7. Git
+		$ git add .
 		$ git commit -a -m "welcome-user"
 		$ git checkout master
 		$ git merge welcome-user
