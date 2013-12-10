@@ -11,15 +11,16 @@
 // about supported directives.
 //
 //= require jquery
+//= require jquery_ujs
+//= require jquery.ui.all
+//= require jquery.ui.datepicker
 //= require turbolinks
 //= require_tree .
 //= require bootstrap
 //= require highcharts/highcharts                                                           
 //= require highcharts/highcharts-more                                                         
 //= require highcharts/highstock
-//= require jquery_ujs
-//= require jquery.ui.all
-//= require jquery.ui.datepicker
+
 
 $('document').ready(function() {
 /*
