@@ -35,6 +35,6 @@ RomaMoneyRails::Application.configure do
     user_name:            'romalopes',
     password:             '',
     authentication:       'plain',
-    enable_starttls_auto: true  }
-  end
+    enable_starttls_auto: true  
+  }
 end
