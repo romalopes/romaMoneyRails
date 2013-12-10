@@ -63,6 +63,9 @@ class UsersController < ApplicationController
 	    #The final implementation
 	    @user = User.new(user_params)
 	    if @user.save
+	      # Tell the UserMailer to send a welcome Email after save
+	      UserMailer.welcome_email(@user).deliver
+
 	      # Handle a successful save.
 	      sign_in @user
 	      flash[:success] = "Welcome to Roma Money Rails!"

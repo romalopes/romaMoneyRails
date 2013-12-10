@@ -1287,6 +1287,72 @@ Make Accounts have many User
 				$ heroku run rake db:migrate
 			$ heroku open
 
+Sending email welcoming a new user
+	$ git checkout -b welcome-user
+	Class inherit from ActionMailer::Base and live in app/mailers
+	1. Create the mailer
+		$ rails generate mailer UserMailer
+		    create  app/mailers/user_mailer.rb
+		    invoke  erb
+		      create    app/views/user_mailer
+		    invoke  rspec
+		      create    spec/mailers/user_mailer_spec.rb
+	2. Change user_mailer.rb
+		class UserMailer < ActionMailer::Base
+		  default from: "romalopes@yahoo.com.br"  <-- Default from
+		end
+	3. Add a method called welcome
+		 def welcome_email(user)
+		    @user = user
+		    @url  = 'https://romamoneyrails.herokuapp.com/login'
+		    mail(to: @user.email, subject: 'Welcome to Roma Money Rails')
+		 end
+	4. Create a welcome_email.html.erb
+		<!DOCTYPE html>
+		<html>
+		  <head>
+		    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+		  </head>
+		  <body>
+		    <h1>Welcome to Roma Money Rails, <%= @user.name %></h1>
+		    <p>
+		      You have successfully signed up to romamoneyrails.heroku.com,
+		      your username is: <%= @user.login %>.<br/>
+		    </p>
+		    <p>
+		      To login to the site, just follow this link: <%= @url %>.
+		    </p>
+		    <p>Thanks for joining and have a great day!</p>
+		  </body>
+		</html>
+	5. In method create of UsersController
+	      if @user.save
+	        # Tell the UserMailer to send a welcome Email after save
+	        UserMailer.welcome_email(@user).deliver
+	6. You can configure the smtp in config/enviroments/$RAILS_ENV
+	  config.action_mailer.delivery_method = :smtp
+	  config.action_mailer.smtp_settings = {
+	    address:              'smtp.gmail.com',
+	    port:                 587,
+	    domain:               'gmail.com',
+	    user_name:            'romalopes',
+	    password:             '',
+	    authentication:       'plain',
+	    enable_starttls_auto: true  }
+	  end
+	7. Git
+		$ git commit -a -m "welcome-user"
+		$ git checkout master
+		$ git merge welcome-user
+		$ git push
+		$ git push heroku
+		$ heroku run rake db:migrate
+		$ heroku run rake db:migrate
+		$ heroku run rake db:populate
+		$ heroku restart
+		$ heroku open
+
+
 Invite User to account using email
 	git checkout -b invite-users-using-email
 
