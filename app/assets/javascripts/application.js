@@ -11,6 +11,20 @@
 // about supported directives.
 //
 //= require jquery
+//= require turbolinks
+//= require_tree .
+//= require bootstrap
+//= require highcharts/highcharts                                                           
+//= require highcharts/highcharts-more                                                         
+//= require highcharts/highstock
+//= require jquery_ujs
+//= require jquery.ui.all
+//= require jquery.ui.datepicker
+
+$('document').ready(function() {
+/*
+
+//= require jquery
 //= require jquery_ujs
 //= require jquery.ui.all
 //= require turbolinks
@@ -23,11 +37,7 @@
 //= require jquery.ui.core
 //= require jquery.ui.widget
 //= require jquery.ui.mouse
-//= require jquery.ui.position
-
-
-
-$('document').ready(function() {
+//= require jquery.ui.position*/
 
   $("#sendToTopPage").click(function(){
     $(window).scrollTop(0);
