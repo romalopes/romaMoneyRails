@@ -4,6 +4,6 @@ class UserMailer < ActionMailer::Base
 	def welcome_email(user)
 	    @user = user
 	    @url  = 'https://romamoneyrails.herokuapp.com/sigin'
-	    mail(to: 'romalopes@yahoo.com.br', subject: 'Welcome to Roma Money Rails')
+	    mail(to: @user.email, subject: 'Welcome to Roma Money Rails')
 	end
 end
