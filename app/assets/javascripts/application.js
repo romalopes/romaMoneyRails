@@ -23,22 +23,6 @@
 
 
 $('document').ready(function() {
-/*
-
-//= require jquery
-//= require jquery_ujs
-//= require jquery.ui.all
-//= require turbolinks
-//= require bootstrap
-//= require_tree .
-//= require highcharts/highcharts                                                           
-//= require highcharts/highcharts-more                                                         
-//= require highcharts/highstock
-
-//= require jquery.ui.core
-//= require jquery.ui.widget
-//= require jquery.ui.mouse
-//= require jquery.ui.position*/
 
   $("#sendToTopPage").click(function(){
     $(window).scrollTop(0);
