@@ -101,20 +101,20 @@ Include users
  	Git
  		$ git checkout master
 		$ git checkout -b include-users
-		- Generate the controler class and file for User
-			$ rails generate controller Users new --no-test-framework
-				create  app/controllers/users_controller.rb
-			     route  get "users/new"
-			    invoke  erb
-			    create    app/views/users
-			    create    app/views/users/new.html.erb
-			    invoke  helper
-			    create    app/helpers/users_helper.rb
-			    invoke  assets
-			    invoke    coffee
-			    create      app/assets/javascripts/users.js.coffee
-			    invoke    scss
-			    create      app/assets/stylesheets/users.css.scss
+	- Generate the controler class and file for User
+		$ rails generate controller Users new --no-test-framework
+			create  app/controllers/users_controller.rb
+		     route  get "users/new"
+		    invoke  erb
+		    create    app/views/users
+		    create    app/views/users/new.html.erb
+		    invoke  helper
+		    create    app/helpers/users_helper.rb
+		    invoke  assets
+		    invoke    coffee
+		    create      app/assets/javascripts/users.js.coffee
+		    invoke    scss
+		    create      app/assets/stylesheets/users.css.scss
 	- Generate the- model class and file for User
 		- For Model User is singular, different from Controller where Users is plural.
 		$ rails generate model User name:string email:string

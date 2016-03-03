@@ -33,7 +33,7 @@
 	<% if !@current_category_expense.present? %>
 		style="display:none"
 	<% end %>
->
+
 	Expense
 	<%= select_tag(:category_expense, options_from_collection_for_select(categories_by_group(2), :id, :name, :prompt => true, :selected => @current_category_expense)) %>
 </div>
